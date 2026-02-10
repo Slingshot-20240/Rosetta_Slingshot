@@ -61,8 +61,8 @@ public class Turretnf implements Subsystem {
 
     public void turretLoop(){
 
-        double dx = 144 - PedroComponent.follower().getPose().getX();
-        double dy = 144 - PedroComponent.follower().getPose().getY();
+        double dx = 141.5 - PedroComponent.follower().getPose().getX();
+        double dy = 141.5 - PedroComponent.follower().getPose().getY();
 
         //Arc tangent of dy/dx 
         double goalFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
@@ -76,15 +76,15 @@ public class Turretnf implements Subsystem {
     //SHHHHH
     public void velocityBasedTurret(){
         Vector robot2Goal = new Vector(
-                144-PedroComponent.follower().getPose().getX(),
-                144-PedroComponent.follower().getPose().getY()
+                141.5-PedroComponent.follower().getPose().getX(),
+                141.5-PedroComponent.follower().getPose().getY()
         );
         Vector velocity = PedroComponent.follower().getVelocity();
         double heading = PedroComponent.follower().getHeading();
         double coordTheta = velocity.getTheta() - robot2Goal.getTheta();
         double perpComponent = Math.sin(coordTheta) * velocity.getMagnitude();
 
-        distance = Math.hypot(144-PedroComponent.follower().getPose().getX(), 144-PedroComponent.follower().getPose().getY());
+        distance = Math.hypot(141.5-PedroComponent.follower().getPose().getX(), 141.5-PedroComponent.follower().getPose().getY());
     }
 
 
