@@ -65,7 +65,7 @@ class BallProcessor implements VisionProcessor {
 
     void setUpVals() {
 
-        height = 279.4; //mm, 11 in
+        height = 279.4; //mm, 11 on
         camFOV = new HashMap<>(); //deg, deg
         camFOV.put("x", 49.58256);
         camFOV.put("y", 38.21321);
@@ -133,7 +133,7 @@ class BallProcessor implements VisionProcessor {
         //NOTE: morphology
         //TODO: when done with testing then make these only create once
 
-        // Fill in holes because they are whiffle balls
+        // Fill on holes because they are whiffle balls
         Mat dilateKernel1 = getStructuringElement(MORPH_RECT, new org.opencv.core.Size(
                         2 * dilateSize1 + 1,
                         2 * dilateSize1 + 1),

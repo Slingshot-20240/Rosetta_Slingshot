@@ -1,9 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.pedropathing.paths.PathChain;
+
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
@@ -14,7 +19,7 @@ public class Transfernf implements Subsystem {
     public static final Transfernf INSTANCE = new Transfernf();
     private Transfernf() {}
 
-    public MotorEx frontTransfer;
+    public MotorEx transfer;
     public ServoEx blocker;
     private final ControlSystem transferController = ControlSystem.builder()
             .velPid(1, 0, 0.001)
@@ -24,38 +29,26 @@ public class Transfernf implements Subsystem {
 
     //Motor Commands
     public Command on() {
-        return new ParallelGroup(
-                new SetPower(frontTransfer, -1.0),
-                open()
-        ).addRequirements(frontTransfer, blocker);
+        return new SetPower(transfer, -1.0);
     }
 
-    public Command idle() {
-        return new SequentialGroup(
-                new SetPower(frontTransfer,0),
-                close()
-        ).addRequirements(frontTransfer, blocker);
+    public Command off() {
+        return new SetPower(transfer, 0.0);
     }
 
     //Blocker Commands
     public Command close() {
-        return new SetPosition(blocker, 0.4).requires(this);
+        return new InstantCommand(() -> blocker.getServo().setPosition(0.2));
     }
     public Command open() {
-        return new SetPosition(blocker, 0.2).requires(this);
+        return new InstantCommand(() -> blocker.getServo().setPosition(0.4));
     }
 
 
-    public Command shoot() {
-        return new SequentialGroup(
-                open(),
-                on()
-        );
-    }
 
     @Override
     public void initialize() {
-        frontTransfer = new MotorEx("transferF");
+        transfer = new MotorEx("transfer");
         blocker = new ServoEx("blocker");
     }
 

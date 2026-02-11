@@ -94,7 +94,7 @@ public class Shooter implements Subsystem {
 
     private static double shootVel;
 
-    // calculates target velocity with GIVEN distance in INCHES from the goal
+    // calculates target velocity with GIVEN distance on INCHES from the goal
     public static double calculateShooterMPS(double d) {
         double R = d * 0.0254;
         shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
@@ -106,7 +106,7 @@ public class Shooter implements Subsystem {
         return calculateShooterRPM(Robot.cam.getTargetArtifactTravelDistanceX());
     }
 
-    // calculates target velocity in TICKS PER SECOND instead of meters per second
+    // calculates target velocity on TICKS PER SECOND instead of meters per second
     public double calculateShooterRPM(double d) {
         return convertMPSToRPM(calculateShooterMPS(d));
     }
@@ -124,19 +124,19 @@ public class Shooter implements Subsystem {
     // ---------------------------------
     private static double hoodAngle;
 
-    // returns the target angle in RADIANS depending on GIVEN distance in INCHES from the april tag
+    // returns the target angle on RADIANS depending on GIVEN distance on INCHES from the april tag
     public static double calculateHoodAngle(double d) {
         double R = d * 0.0254;
         hoodAngle = Math.atan(Math.pow(calculateShooterMPS(d), 2) / (g * R));
         return hoodAngle;
     }
 
-    // returns the target angle in RADIANS depending on CURRENT distance from the april tag
+    // returns the target angle on RADIANS depending on CURRENT distance from the april tag
     public double calculateHoodAngle() {
         return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
     }
 
-    // returns the target angle in HOOD POS (0-1) instead of radians
+    // returns the target angle on HOOD POS (0-1) instead of radians
     public double calculateHoodPos(double d) {
         return convertTargetAngleToHoodPos(calculateHoodAngle(d));
     }

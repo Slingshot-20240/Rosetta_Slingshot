@@ -21,15 +21,17 @@ public class Turretnf implements Subsystem {
     public static final Turretnf INSTANCE = new Turretnf();
     private Turretnf() {}
 
-    private CRServoEx axonTurretServo = new CRServoEx("turretServo", 0.01);
-
-    public AnalogInput turretEncoder;
-
+    private CRServoEx lTurret = new CRServoEx("lTurret", 0.01);
+    private CRServoEx rTurret = new CRServoEx("rTurret", 0.01);
 
 
-    public ControlSystem turretPIDController = ControlSystem.builder()
+    public AnalogInput lTurretEncoder;
+    public AnalogInput rTurretEncoder;
+
+    public ControlSystem turretController = ControlSystem.builder()
             .posPid(turretPIDCoefficients)
             .build();
+
     public double power;
     public static Double targetTurretAng = 0.0;
     private static double offset = 4.0;
@@ -45,22 +47,25 @@ public class Turretnf implements Subsystem {
 
     @Override
     public void initialize() {
-        turretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "turretAnalog");
-
+        //left turret encoder, right turret encoder
+        lTurretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "lte");
+        lTurretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "rte");
     }
+
     @Override
     public void periodic() {
         if (AUTO_AIM) {
             turretLoop();
         }
-        turretPIDController.setGoal(new KineticState(targetTurretAng));
+        turretController.setGoal(new KineticState(targetTurretAng));
         // (-) Power because gear rotates other gear opposite
-        power = -turretPIDController.calculate(new KineticState(getTurretDegrees()));
-        axonTurretServo.setPower(power);
+        power = -turretController.calculate(new KineticState(getTurretDegrees()));
+        lTurret.setPower(power);
+        //TODO - may need to reverse this power
+        rTurret.setPower(power);
     }
 
-    public void turretLoop(){
-
+    public void turretLoop() {
         double dx = 141.5 - PedroComponent.follower().getPose().getX();
         double dy = 141.5 - PedroComponent.follower().getPose().getY();
 
@@ -74,7 +79,7 @@ public class Turretnf implements Subsystem {
 
     }
     //SHHHHH
-    public void velocityBasedTurret(){
+    public void velocityBasedTurret() {
         Vector robot2Goal = new Vector(
                 141.5-PedroComponent.follower().getPose().getX(),
                 141.5-PedroComponent.follower().getPose().getY()
@@ -102,8 +107,9 @@ public class Turretnf implements Subsystem {
 
 
     private double getTurretDegrees() {
+        //TODO - may need to change max voltage
         //yeah so voltage is what feedback get from servo and its pretty much a linear graph so all you need to do is divide by max voltage which is 3.3. And then i just multiply by 360 to go into degrees you could do radians but i dont like radians
-        double servoDeg = (turretEncoder.getVoltage() / 3.3) * 360.0;
+        double servoDeg = (lTurretEncoder.getVoltage() / 3.3) * 360.0;
 
         // convert to turret degrees
         return normalizeAngle(servoDeg) / GEAR_RATIO;

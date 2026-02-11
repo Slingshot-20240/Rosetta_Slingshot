@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
@@ -16,10 +18,10 @@ public class Intakenf implements Subsystem {
 
 
     //Intake Commands
-    public Command in() {
+    public Command on() {
         return new SetPower(intake, 1.0);
     }
-    public Command idle() {
+    public Command off() {
         return new SetPower(intake, 0);
     }
     public Command out() {
@@ -28,12 +30,19 @@ public class Intakenf implements Subsystem {
 
     //Intake Lift Commands
     public Command down() {
-        return new SetPosition(intakeLift, 0.4).requires(this);
+        return new InstantCommand(() -> intakeLift.getServo().setPosition(0.1));
     }
     public Command up() {
-        return new SetPosition(intakeLift, 0.2).requires(this);
+        return new InstantCommand(() -> intakeLift.getServo().setPosition(0.4));
     }
 
+    //Overall Commands
+    public Command downAndOn() {
+        return new ParallelGroup(
+                down(),
+                on()
+        );
+    }
 
 
     @Override
