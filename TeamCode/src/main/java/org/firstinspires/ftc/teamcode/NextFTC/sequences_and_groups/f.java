@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.subsystems.Lednf;
-import org.firstinspires.ftc.teamcode.subsystems.Loginf;
+import org.firstinspires.ftc.teamcode.subsystems.Led;
+import org.firstinspires.ftc.teamcode.subsystems.Logi;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
@@ -19,7 +19,7 @@ public class f extends SubsystemGroup {
 
     private f() {
         super(
-                Lednf.INSTANCE
+                Led.INSTANCE
         );
     }
 
@@ -31,19 +31,19 @@ public class f extends SubsystemGroup {
     public final Command follow(PathChain path, String color) {
         return new ParallelGroup(
                 new FollowPath(path),
-                Lednf.INSTANCE.color(color)
+                Led.INSTANCE.color(color)
         );
     }
     public final Command follow(PathChain path, String color, boolean holdEnd) {
         return new ParallelGroup(
                 new FollowPath(path, holdEnd),
-                Lednf.INSTANCE.color(color)
+                Led.INSTANCE.color(color)
         );
     }
     public final Command follow(PathChain path, String color, boolean holdEnd, double maxPower) {
         return new ParallelGroup(
                 new FollowPath(path, holdEnd, maxPower),
-                Lednf.INSTANCE.color(color)
+                Led.INSTANCE.color(color)
         );
     }
     public final Command follow(PathChain path, boolean holdEnd) {
@@ -59,7 +59,7 @@ public class f extends SubsystemGroup {
 
     public final Command autoAlign() {
         return new SequentialGroup(
-                new TurnBy(Angle.fromDeg(Loginf.INSTANCE.getATangle()))
+                new TurnBy(Angle.fromDeg(Logi.INSTANCE.getATangle()))
         );
     }
 

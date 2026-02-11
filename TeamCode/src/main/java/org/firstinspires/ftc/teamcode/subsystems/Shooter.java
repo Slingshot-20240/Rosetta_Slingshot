@@ -12,6 +12,7 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
+import org.firstinspires.ftc.teamcode.subsystems.Logi;
 
 @Configurable
 public class Shooter implements Subsystem {
@@ -82,7 +83,21 @@ public class Shooter implements Subsystem {
     public Command instanceSetVelo(double velocity) {
         return new ParallelGroup(
                 new InstantCommand(() -> outtake1.getMotor().setVelocity(velocity)),
-                new InstantCommand(() -> outtake1.getMotor().setVelocity(velocity))
+                new InstantCommand(() -> outtake2.getMotor().setVelocity(velocity))
+        );
+    }
+
+    public Command instanceShootBack() {
+        return new ParallelGroup(
+                new InstantCommand(() -> outtake1.getMotor().setVelocity(-1500)),
+                new InstantCommand(() -> outtake2.getMotor().setVelocity(-1500))
+        );
+    }
+
+    public Command instanceShootFront() {
+        return new ParallelGroup(
+                new InstantCommand(() -> outtake1.getMotor().setVelocity(-1000)),
+                new InstantCommand(() -> outtake2.getMotor().setVelocity(-1000))
         );
     }
 
@@ -103,7 +118,7 @@ public class Shooter implements Subsystem {
 
     // calculates target velocity with CURRENT distance away from the goal
     public double calculateShooterMPS() {
-        return calculateShooterRPM(Robot.cam.getTargetArtifactTravelDistanceX());
+        return calculateShooterRPM(Logi.INSTANCE.getTargetArtifactTravelDistanceX());
     }
 
     // calculates target velocity on TICKS PER SECOND instead of meters per second
@@ -133,7 +148,7 @@ public class Shooter implements Subsystem {
 
     // returns the target angle on RADIANS depending on CURRENT distance from the april tag
     public double calculateHoodAngle() {
-        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
+        return calculateHoodAngle(Logi.INSTANCE.getTargetArtifactTravelDistanceX());
     }
 
     // returns the target angle on HOOD POS (0-1) instead of radians
