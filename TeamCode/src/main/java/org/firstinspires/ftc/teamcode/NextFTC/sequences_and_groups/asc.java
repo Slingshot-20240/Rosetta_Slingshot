@@ -6,7 +6,7 @@ import com.pedropathing.paths.PathChain;
 import org.firstinspires.ftc.teamcode.subsystems.Hood;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Led;
-import org.firstinspires.ftc.teamcode.subsystems.Transfernf;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import dev.nextftc.core.commands.Command;
@@ -21,7 +21,7 @@ public class asc extends SubsystemGroup {
     public static final asc i = new asc();
     private asc() {
         super(
-                Intake.INSTANCE, Transfernf.INSTANCE,
+                Intake.INSTANCE, Transfer.INSTANCE,
                 Shooter.INSTANCE, Hood.INSTANCE,
                 Led.INSTANCE
         );
@@ -37,7 +37,7 @@ public class asc extends SubsystemGroup {
      */
     public final Command transferUpFor(double time) {
         return new ParallelGroup(
-                Transfernf.INSTANCE.on(),
+                Transfer.INSTANCE.on(),
                 new Delay(time),
                 Led.INSTANCE.yellow
         );
@@ -51,7 +51,7 @@ public class asc extends SubsystemGroup {
      */
     public final Command transferSequence(PathChain lastPathChain, double transferTime) {
         return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
+                Transfer.INSTANCE.hotdog(),
                 new WaitUntil(() -> lastPathChain.lastPath().isAtParametricEnd()),
                 transferUpFor(transferTime)
 
@@ -60,7 +60,7 @@ public class asc extends SubsystemGroup {
 
     public final Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
         return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
+                Transfer.INSTANCE.hotdog(),
                 new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
                 transferUpFor(transferTime)
         );
@@ -68,7 +68,7 @@ public class asc extends SubsystemGroup {
     public final Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity, double spinUp) {
         return new SequentialGroup(
                 new Delay(spinUp),
-                Transfernf.INSTANCE.hotdog(),
+                Transfer.INSTANCE.hotdog(),
                 new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
                 transferUpFor(transferTime)
         );

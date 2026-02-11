@@ -2,13 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Park;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
 public class Robot {
 
@@ -35,16 +32,9 @@ public class Robot {
     // ------------------ MECHANISMS ------------------ //
 
     public final IMU imu;
-    public Intake intake;
-    public Transfer transfer;
-    public Shooter shooter;
-    public Park park;
 
     // ------------------ SENSORS ------------------ //
 
-    public static logi cam;
-    public DigitalChannel ledBoard0;
-    public DigitalChannel ledBoard1;
     public GoBildaPinpointDriver driver;
 
     // ------------------ MISC ------------------ //
@@ -61,44 +51,5 @@ public class Robot {
         imu.resetYaw();
 
         driver = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-
-        cam = new logi(hardwareMap);
-
-        intake = new Intake(hardwareMap);
-        transfer = new TransferM(hardwareMap);
-        shooter = new Shooter(hardwareMap);
-        park = new Park(hardwareMap);
-
-        park = new Park(hardwareMap);
-
-        drivetrain = new Drivetrain(hardwareMap, imu, controls);
-
-        ledBoard0 = hardwareMap.get(DigitalChannel.class, "ledBoard0");
-        ledBoard0.setMode(DigitalChannel.Mode.OUTPUT);
-        ledBoard1 = hardwareMap.get(DigitalChannel.class, "ledBoard1");
-        ledBoard1.setMode(DigitalChannel.Mode.OUTPUT);
-    }
-
-    public Robot(GamepadMapping controls, IMU imu, GoBildaPinpointDriver pinpoint,
-                 logi cam, Intake intake, TransferM transfer, Shooter shooter, Drivetrain dt,
-                 DigitalChannel led0, DigitalChannel led1, Park park) {
-        this.controls = controls;
-        this.imu = imu;
-        this.driver = pinpoint;
-        // this.cam = cam;
-        this.intake = intake;
-        this.transfer = transfer;
-        this.shooter = shooter;
-        this.drivetrain = dt;
-        this.ledBoard0 = led0;
-        this.ledBoard1 = led1;
-        this.park = park;
-    }
-
-    public void hardwareSoftReset() {
-        transfer.transferOff();
-        shooter.hoodToBack();
-        intake.intakeOff();
-        shooter.setShooterVelocity(0);
     }
 }

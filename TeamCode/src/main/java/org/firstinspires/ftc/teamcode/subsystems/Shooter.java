@@ -12,6 +12,7 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
+import org.firstinspires.ftc.teamcode.subsystems.Logi;
 
 @Configurable
 public class Shooter implements Subsystem {
@@ -117,7 +118,7 @@ public class Shooter implements Subsystem {
 
     // calculates target velocity with CURRENT distance away from the goal
     public double calculateShooterMPS() {
-        return calculateShooterRPM(Robot.cam.getTargetArtifactTravelDistanceX());
+        return calculateShooterRPM(Logi.INSTANCE.getTargetArtifactTravelDistanceX());
     }
 
     // calculates target velocity in TICKS PER SECOND instead of meters per second
@@ -147,7 +148,7 @@ public class Shooter implements Subsystem {
 
     // returns the target angle in RADIANS depending on CURRENT distance from the april tag
     public double calculateHoodAngle() {
-        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
+        return calculateHoodAngle(Logi.INSTANCE.getTargetArtifactTravelDistanceX());
     }
 
     // returns the target angle in HOOD POS (0-1) instead of radians

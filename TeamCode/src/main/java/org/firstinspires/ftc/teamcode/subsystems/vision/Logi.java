@@ -20,7 +20,7 @@ public class Logi implements Subsystem {
 
     public static final Logi INSTANCE = new Logi();
 
-    private Logi() {}
+    public Logi() {}
 
     AprilTagProcessor apriltagPipeline;
 
