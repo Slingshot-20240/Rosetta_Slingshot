@@ -15,9 +15,9 @@ import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
 import dev.nextftc.hardware.powerable.SetPower;
 
-public class Transfernf implements Subsystem {
-    public static final Transfernf INSTANCE = new Transfernf();
-    private Transfernf() {}
+public class Transfer implements Subsystem {
+    public static final Transfer INSTANCE = new Transfer();
+    private Transfer() {}
 
     public MotorEx transfer;
     public ServoEx blocker;

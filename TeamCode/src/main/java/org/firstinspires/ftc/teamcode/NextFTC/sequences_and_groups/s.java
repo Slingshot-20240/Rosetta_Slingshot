@@ -5,12 +5,10 @@ import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.subsystems.Hood;
 import org.firstinspires.ftc.teamcode.subsystems.Intakenf;
-import org.firstinspires.ftc.teamcode.subsystems.Lednf;
-import org.firstinspires.ftc.teamcode.subsystems.Transfernf;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.conditionals.IfElseCommand;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
@@ -22,9 +20,8 @@ public class s extends SubsystemGroup {
     public static final s i = new s();
     private s() {
         super(
-                Intakenf.INSTANCE, Transfernf.INSTANCE,
-                Shooter.INSTANCE, Hood.INSTANCE,
-                Lednf.INSTANCE
+                Intakenf.INSTANCE, Transfer.INSTANCE,
+                Shooter.INSTANCE, Hood.INSTANCE
         );
 
     }
@@ -34,15 +31,15 @@ public class s extends SubsystemGroup {
      * Opens blocker
      * Transfers up for shootTime seconds
      * Close blocker
-     * @param shootTime
-     * @param pathChain
-     * @return
+     * @param shootTime time transfer shoots for
+     * @param pathChain last pathChain of sequence
+     * @return Sequential Group
      */
     public Command shootSequence(double shootTime, PathChain pathChain) {
         return new SequentialGroup(
                 new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                Transfernf.INSTANCE.open(),
-                Transfernf.INSTANCE.on(),
+                Transfer.INSTANCE.open(),
+                Transfer.INSTANCE.on(),
                 new Delay(shootTime)
         );
     }
@@ -56,10 +53,10 @@ public class s extends SubsystemGroup {
      */
     public Command shoot(double shootTime) {
         return new SequentialGroup(
-                Transfernf.INSTANCE.open(),
-                Transfernf.INSTANCE.on(),
+                Transfer.INSTANCE.open(),
+                Transfer.INSTANCE.on(),
                 new Delay(shootTime),
-                Transfernf.INSTANCE.close()
+                Transfer.INSTANCE.close()
         );
     }
 
@@ -71,10 +68,10 @@ public class s extends SubsystemGroup {
      */
     public Command intakeSequence() {
         return new ParallelGroup(
-                Transfernf.INSTANCE.close(),
+                Transfer.INSTANCE.close(),
                 Intakenf.INSTANCE.downAndOn(),
 //                new WaitUntil(() -> /* beam break senses first ball (highest beam break) */)
-                Transfernf.INSTANCE.off()
+                Transfer.INSTANCE.off()
         );
     }
 
@@ -86,7 +83,7 @@ public class s extends SubsystemGroup {
     public Command goScoreSequence() {
         return new SequentialGroup(
                 Intakenf.INSTANCE.up(),
-                Transfernf.INSTANCE.off()
+                Transfer.INSTANCE.off()
         );
     }
 
