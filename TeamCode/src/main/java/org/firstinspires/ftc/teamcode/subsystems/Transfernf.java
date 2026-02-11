@@ -46,6 +46,13 @@ public class Transfernf implements Subsystem {
     }
 
 
+    public Command shoot() {
+        return new SequentialGroup(
+                open(),
+                on()
+        );
+    }
+
     @Override
     public void initialize() {
         frontTransfer = new MotorEx("transferF");
