@@ -3,12 +3,8 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
+import org.firstinspires.ftc.teamcode.subsystems.Lednf;
+import org.firstinspires.ftc.teamcode.subsystems.Loginf;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
