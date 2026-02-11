@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 //Not done yet sdadge
-class BallProcessor implements VisionProcessor {
+public class BallProcessor implements VisionProcessor {
 
     //things for eocv sim
     public boolean seeThres = false;

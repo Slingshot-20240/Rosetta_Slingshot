@@ -82,7 +82,21 @@ public class Shooter implements Subsystem {
     public Command instanceSetVelo(double velocity) {
         return new ParallelGroup(
                 new InstantCommand(() -> outtake1.getMotor().setVelocity(velocity)),
-                new InstantCommand(() -> outtake1.getMotor().setVelocity(velocity))
+                new InstantCommand(() -> outtake2.getMotor().setVelocity(velocity))
+        );
+    }
+
+    public Command instanceShootBack() {
+        return new ParallelGroup(
+                new InstantCommand(() -> outtake1.getMotor().setVelocity(-1500)),
+                new InstantCommand(() -> outtake2.getMotor().setVelocity(-1500))
+        );
+    }
+
+    public Command instanceShootFront() {
+        return new ParallelGroup(
+                new InstantCommand(() -> outtake1.getMotor().setVelocity(-1000)),
+                new InstantCommand(() -> outtake2.getMotor().setVelocity(-1000))
         );
     }
 

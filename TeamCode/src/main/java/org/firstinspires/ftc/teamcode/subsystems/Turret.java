@@ -11,25 +11,28 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.impl.CRServoEx;
-public class Turretnf implements Subsystem {
+public class Turret implements Subsystem {
+
+    // ------------------ INSTANCE ------------------ //
 
     public static double distance;
     // P is pretty much 1/range 
     public static PIDCoefficients turretPIDCoefficients =
             new PIDCoefficients(0.02, 0.0, 0);
 
-    public static final Turretnf INSTANCE = new Turretnf();
-    private Turretnf() {}
+    public static final Turret INSTANCE = new Turret();
+    private Turret() {}
 
     private CRServoEx axonTurretServo = new CRServoEx("turretServo", 0.01);
 
     public AnalogInput turretEncoder;
 
-
+    // ------------------ COMMANDS ------------------ //
 
     public ControlSystem turretPIDController = ControlSystem.builder()
             .posPid(turretPIDCoefficients)
             .build();
+
     public double power;
     public static Double targetTurretAng = 0.0;
     private static double offset = 4.0;
@@ -42,12 +45,12 @@ public class Turretnf implements Subsystem {
 
     Pose goal = new Pose(141.5,141.5);
 
-
     @Override
     public void initialize() {
         turretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "turretAnalog");
 
     }
+
     @Override
     public void periodic() {
         if (AUTO_AIM) {
@@ -86,7 +89,6 @@ public class Turretnf implements Subsystem {
 
         distance = Math.hypot(141.5-PedroComponent.follower().getPose().getX(), 141.5-PedroComponent.follower().getPose().getY());
     }
-
 
     private static double clamp(double v, double lo, double hi) {
         return Math.max(lo, Math.min(hi, v));

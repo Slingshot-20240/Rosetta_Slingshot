@@ -5,6 +5,7 @@ import android.util.Size;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.subsystems.vision.BallProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -13,13 +14,21 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
 
 
-public class Loginf implements Subsystem {
-    public static final Loginf INSTANCE = new Loginf();
-    private Loginf() {}
+public class Logi implements Subsystem {
+
+    // ------------------ INSTANCES ------------------ //
+
+    public static final Logi INSTANCE = new Logi();
+
+    private Logi() {}
 
     AprilTagProcessor apriltagPipeline;
 
     VisionPortal portal;
+
+    BallProcessor ballPipeline;
+
+    // ------------------ COMMANDS ------------------ //
 
     public double getATdist() {
         if(!portal.getProcessorEnabled(apriltagPipeline))
@@ -65,18 +74,26 @@ public class Loginf implements Subsystem {
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .build();
 
+        ballPipeline = new BallProcessor();
+
+        int[] myPortalsList = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
         portal = new VisionPortal.Builder()
                 .setCamera(ActiveOpMode.hardwareMap().get(WebcamName.class, "Webcam 1"))
-                .addProcessors(apriltagPipeline)
+                .addProcessors(apriltagPipeline, ballPipeline)
                 .setCameraResolution(new Size(1920, 1080))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .setAutoStopLiveView(true)
-
+                .setLiveViewContainerId(myPortalsList[0])
                 .build();
 
         portal.setProcessorEnabled(apriltagPipeline, true);
-        enableAT();
+        portal.setProcessorEnabled(ballPipeline, false);
+    }
+
+    // extra 4" for cam-to-flywheel, 18" for AT-to-back-of-goal
+    public double getTargetArtifactTravelDistanceX() {
+        return getATdist() + 22;
     }
 
     @Override

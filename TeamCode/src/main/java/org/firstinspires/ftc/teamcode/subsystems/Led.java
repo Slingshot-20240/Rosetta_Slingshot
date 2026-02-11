@@ -10,13 +10,17 @@ import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
 
-public class Lednf implements Subsystem {
-    public static final Lednf INSTANCE = new Lednf();
-    private Lednf() { }
+public class Led implements Subsystem {
+
+    // ------------------ INSTANCES ------------------ //
+
+    public static final Led INSTANCE = new Led();
+    private Led() { }
 
     public DigitalChannel ledBoard0;
     public DigitalChannel ledBoard1;
 
+    // ------------------ COMMANDS ------------------ //
 
     public Command off = new InstantCommand(() -> {
         ledBoard0.setState(false);
@@ -61,6 +65,7 @@ public class Lednf implements Subsystem {
             });
         }
     }
+
     public Command flash(String color1, String color2, double intensityDelay, double time) {
             return new ParallelRaceGroup(
                     new SequentialGroup(

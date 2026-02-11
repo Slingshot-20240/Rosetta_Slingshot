@@ -6,13 +6,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
-import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.park.Park;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transfer.TransferM;
-import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Park;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 public class Robot {
 
@@ -40,9 +36,8 @@ public class Robot {
 
     public final IMU imu;
     public Intake intake;
-    public TransferM transfer;
+    public Transfer transfer;
     public Shooter shooter;
-    public Drivetrain drivetrain;
     public Park park;
 
     // ------------------ SENSORS ------------------ //
