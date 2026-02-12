@@ -207,7 +207,7 @@ public class BallProcessor implements VisionProcessor {
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
 
     }
-
+    public double deltaX(){return l3;}
     public double getAngle(){
     return Math.atan(l3/horiz);
     }
