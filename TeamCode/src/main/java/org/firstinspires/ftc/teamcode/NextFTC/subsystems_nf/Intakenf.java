@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
@@ -10,40 +9,39 @@ import dev.nextftc.hardware.positionable.SetPosition;
 import dev.nextftc.hardware.powerable.SetPower;
 
 public class Intakenf implements Subsystem {
+
+    // ------------------ INSTANCES ------------------ //
+
     public static final Intakenf INSTANCE = new Intakenf();
+
     private Intakenf() { }
 
     public MotorEx intake;
+
     public ServoEx intakeLift;
 
 
-    //Intake Commands
-    public Command on() {
+// --- Intake --- //
+    public Command in() {
         return new SetPower(intake, 1.0);
     }
-    public Command off() {
+    public Command idle() {
         return new SetPower(intake, 0);
     }
     public Command out() {
         return new SetPower(intake, -1.0);
     }
 
-    //Intake Lift Commands
+// --- Intake Lift --- //
     public Command down() {
-        return new InstantCommand(() -> intakeLift.getServo().setPosition(0.1));
+        return new InstantCommand(() -> intakeLift.getServo().setPosition(0.4)).requires(this);
     }
     public Command up() {
-        return new InstantCommand(() -> intakeLift.getServo().setPosition(0.4));
+        return new InstantCommand(() -> intakeLift.getServo().setPosition(0.2)).requires(this);
     }
 
-    //Overall Commands
-    public Command downAndOn() {
-        return new ParallelGroup(
-                down(),
-                on()
-        );
-    }
 
+    public Command
 
     @Override
     public void initialize() {
@@ -53,4 +51,6 @@ public class Intakenf implements Subsystem {
 
     @Override
     public void periodic() {}
+
+
 }

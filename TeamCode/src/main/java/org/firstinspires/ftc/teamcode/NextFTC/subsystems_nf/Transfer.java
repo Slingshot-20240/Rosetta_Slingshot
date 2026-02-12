@@ -1,18 +1,11 @@
-package org.firstinspires.ftc.teamcode.subsystems;
-
-import com.pedropathing.paths.PathChain;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.delays.WaitUntil;
-import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
-import dev.nextftc.hardware.positionable.SetPosition;
 import dev.nextftc.hardware.powerable.SetPower;
 
 public class Transfer implements Subsystem {

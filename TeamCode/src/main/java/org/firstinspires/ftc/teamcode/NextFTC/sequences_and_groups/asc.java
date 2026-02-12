@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.subsystems.Hood;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Led;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intake;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Led;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfer;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooter;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -22,7 +22,7 @@ public class asc extends SubsystemGroup {
     private asc() {
         super(
                 Intake.INSTANCE, Transfer.INSTANCE,
-                Shooter.INSTANCE, Hood.INSTANCE,
+                Shooter.INSTANCE, Hoodnf.INSTANCE,
                 Led.INSTANCE
         );
 
@@ -79,14 +79,14 @@ public class asc extends SubsystemGroup {
                 Intake.INSTANCE.in(),
                 Shooter.INSTANCE.setShooterVel(shooterVel),
                 //used to be 0.33
-                Hood.INSTANCE.setHoodPos(0.35)
+                Hoodnf.INSTANCE.setHoodPos(0.35)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {
         return new ParallelGroup(
                 Intake.INSTANCE.in(),
                 Shooter.INSTANCE.setShooterVel(shooterVel),
-                Hood.INSTANCE.setHoodPos(hoodPos)
+                Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }
 

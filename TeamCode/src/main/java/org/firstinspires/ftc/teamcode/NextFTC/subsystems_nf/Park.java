@@ -1,7 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
-
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.InstantCommand;

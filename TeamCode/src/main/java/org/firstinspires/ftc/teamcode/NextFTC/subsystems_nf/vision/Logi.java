@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.subsystems.vision;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.vision;
 
 import android.util.Size;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.subsystems.vision.BallProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.vision;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.vision;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,7 +12,7 @@ public class PythonLimelight {
         most recent obelisk ID,
         most recent nav ID,
         angle from change yes (if the marker is on the right, then +, if on left, -),
-        distance from tag (roughly +/- 1 in)
+        distance from tag (roughly +/- 1 on)
     ]
 
     IDEAL FORMAT:

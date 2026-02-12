@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.InstantCommand;
@@ -6,13 +6,13 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
 
-public class Hood implements Subsystem {
+public class Hoodnf implements Subsystem {
 
     // ------------------ INSTANCES ------------------ //
 
-    public static final Hood INSTANCE = new Hood();
+    public static final Hoodnf INSTANCE = new Hoodnf();
 
-    private Hood() {}
+    private Hoodnf() {}
 
     private final ServoEx variableHood = new ServoEx("variableHood",-0.1);
 

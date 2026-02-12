@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.subsystems.Led;
-import org.firstinspires.ftc.teamcode.subsystems.vision.Logi;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Led;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.vision.Logi;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;

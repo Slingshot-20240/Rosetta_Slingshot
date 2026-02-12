@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import com.bylazar.configurables.annotations.Configurable;
-
-import org.firstinspires.ftc.teamcode.Robot;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
@@ -12,7 +10,7 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
-import org.firstinspires.ftc.teamcode.subsystems.Logi;
+import org.firstinspires.ftc.teamcode.subsystems_nf.Logi;
 
 @Configurable
 public class Shooter implements Subsystem {
