@@ -24,13 +24,13 @@ public class Intakenf implements Subsystem {
 
 // --- Intake --- //
     public Command in() {
-        return new SetPower(intake, 1.0);
+        return new InstantCommand(() -> intake.getMotor().setPower(1.0));
     }
     public Command idle() {
-        return new SetPower(intake, 0);
+        return new InstantCommand(() -> intake.getMotor().setPower(0));
     }
     public Command out() {
-        return new SetPower(intake, -1.0);
+        return new InstantCommand(() -> intake.getMotor().setPower(-1.0));
     }
 
 // --- Intake Lift --- //
@@ -48,7 +48,7 @@ public class Intakenf implements Subsystem {
                 down()
         );
     }
-    public Command fullIntakeState() {
+    public Command goToScoreState() {
         return new SequentialGroup(
                 in(),
                 down()

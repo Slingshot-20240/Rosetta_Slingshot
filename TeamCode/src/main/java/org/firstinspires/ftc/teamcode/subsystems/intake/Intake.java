@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Intake {
     public final DcMotorEx intake;
 
-
     public Intake(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         intake.setVelocityPIDFCoefficients(0,0,0,0);

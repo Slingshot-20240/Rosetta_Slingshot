@@ -3,19 +3,16 @@ package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.groups.ParallelRaceGroup;
-import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
 
-public class Led implements Subsystem {
+public class Lednf implements Subsystem {
 
     // ------------------ INSTANCES ------------------ //
 
-    public static final Led INSTANCE = new Led();
-    private Led() { }
+    public static final Lednf INSTANCE = new Lednf();
+    private Lednf() { }
 
     public DigitalChannel ledBoard0;
     public DigitalChannel ledBoard1;
@@ -64,18 +61,6 @@ public class Led implements Subsystem {
                 ledBoard1.setState(false);
             });
         }
-    }
-
-    public Command flash(String color1, String color2, double intensityDelay, double time) {
-            return new ParallelRaceGroup(
-                    new SequentialGroup(
-                        color(color1),
-                        new Delay(intensityDelay),
-                        color(color2),
-                        new Delay(intensityDelay)
-                    ),
-                    new Delay(time)
-            );
     }
 
     @Override

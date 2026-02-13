@@ -30,10 +30,4 @@ public class Hoodnf implements Subsystem {
         return new SetPosition(variableHood, hoodPosition).requires(this);
     }
 
-    // ------------------ TELEOP COMMANDS ------------------ //
-
-    public Command instanceSetPos(double position) {
-        return new InstantCommand(() -> variableHood.setPosition(position));
-    }
-
 }
