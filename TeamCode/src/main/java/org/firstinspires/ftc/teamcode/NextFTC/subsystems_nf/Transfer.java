@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
@@ -20,16 +21,15 @@ public class Transfer implements Subsystem {
             .build();
 
 
-    //Motor Commands
+//Motor Commands
     public Command on() {
-        return new SetPower(transfer, -1.0);
+        return new InstantCommand(() -> transfer.getMotor().setPower(-1.0));
     }
-
     public Command off() {
-        return new SetPower(transfer, 0.0);
+        return new InstantCommand(() -> transfer.getMotor().setPower(0.0));
     }
 
-    //Blocker Commands
+//Blocker Commands
     public Command close() {
         return new InstantCommand(() -> blocker.getServo().setPosition(0.2));
     }
@@ -37,7 +37,12 @@ public class Transfer implements Subsystem {
         return new InstantCommand(() -> blocker.getServo().setPosition(0.4));
     }
 
-
+    public Command shootSet() {
+        return new SequentialGroup(
+                open(),
+                on()
+        );
+    }
 
     @Override
     public void initialize() {
