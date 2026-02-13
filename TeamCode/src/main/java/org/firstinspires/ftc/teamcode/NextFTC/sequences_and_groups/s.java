@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Breakbeamnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
@@ -54,10 +55,8 @@ public class s extends SubsystemGroup {
      */
     public Command shoot(double shootTime) {
         return new SequentialGroup(
-                Transfernf.INSTANCE.open(),
-                Transfernf.INSTANCE.on(),
-                new Delay(shootTime),
-                Transfernf.INSTANCE.close()
+                Transfernf.INSTANCE.shootSet(),
+                new Delay(shootTime)
         );
     }
 
@@ -69,10 +68,13 @@ public class s extends SubsystemGroup {
      */
     public Command intakeSequence() {
         return new ParallelGroup(
-                Transfernf.INSTANCE.close(),
                 Intakenf.INSTANCE.downAndOn(),
-//                new WaitUntil(() -> /* beam break senses first ball (highest beam break) */)
-                Transfernf.INSTANCE.off()
+
+                new SequentialGroup(
+                    Transfernf.INSTANCE.on(),
+                    new WaitUntil(() -> Breakbeamnf.INSTANCE.getCount() == 1),
+                    Transfernf.INSTANCE.off()
+                )
         );
     }
 
