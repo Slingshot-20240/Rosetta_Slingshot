@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
@@ -41,7 +42,18 @@ public class Intakenf implements Subsystem {
     }
 
 
-    public Command
+    public Command intakeState() {
+        return new SequentialGroup(
+                in(),
+                down()
+        );
+    }
+    public Command fullIntakeState() {
+        return new SequentialGroup(
+                in(),
+                down()
+        );
+    }
 
     @Override
     public void initialize() {
