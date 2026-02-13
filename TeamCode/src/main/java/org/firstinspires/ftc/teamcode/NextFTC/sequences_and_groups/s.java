@@ -37,11 +37,10 @@ public class s extends SubsystemGroup {
      * @param pathChain last pathChain of sequence
      * @return Sequential Group
      */
-    public Command shootSequence(double shootTime, PathChain pathChain) {
+    public Command shootSequence(PathChain pathChain, double shootTime) {
         return new SequentialGroup(
                 new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                Transfernf.INSTANCE.open(),
-                Transfernf.INSTANCE.on(),
+                Transfernf.INSTANCE.shootSet(),
                 new Delay(shootTime)
         );
     }
@@ -69,11 +68,12 @@ public class s extends SubsystemGroup {
     public Command intakeSequence() {
         return new ParallelGroup(
                 Intakenf.INSTANCE.downAndOn(),
+                Transfernf.INSTANCE.close(),
 
                 new SequentialGroup(
-                    Transfernf.INSTANCE.on(),
-                    new WaitUntil(() -> Breakbeamnf.INSTANCE.getCount() == 1),
-                    Transfernf.INSTANCE.off()
+                        Transfernf.INSTANCE.on(),
+                        new WaitUntil(() -> Breakbeamnf.INSTANCE.getCount() >= 1), //try == if this doesn't work
+                        Transfernf.INSTANCE.off()
                 )
         );
     }
