@@ -42,16 +42,16 @@ public class Intakenf implements Subsystem {
     }
 
 
-    public Command intakeState() {
+    public Command downAndOn() {
         return new SequentialGroup(
                 in(),
                 down()
         );
     }
-    public Command goToScoreState() {
+    public Command upAndOn() {
         return new SequentialGroup(
                 in(),
-                down()
+                up()
         );
     }
 

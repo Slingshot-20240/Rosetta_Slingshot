@@ -4,8 +4,10 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooter;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
+
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -20,7 +22,7 @@ public class s extends SubsystemGroup {
     private s() {
         super(
                 Intakenf.INSTANCE, Transfernf.INSTANCE,
-                Shooter.INSTANCE, Hoodnf.INSTANCE
+                Shooternf.INSTANCE, Hoodnf.INSTANCE
         );
 
     }
@@ -81,7 +83,7 @@ public class s extends SubsystemGroup {
      */
     public Command goScoreSequence() {
         return new SequentialGroup(
-                Intakenf.INSTANCE.up(),
+                Intakenf.INSTANCE.upAndOn(),
                 Transfernf.INSTANCE.off()
         );
     }
@@ -94,7 +96,7 @@ public class s extends SubsystemGroup {
      */
     public Command shooterState(double velocity) {
         return new ParallelGroup(
-                Shooter.INSTANCE.setShooterVel(velocity),
+                Shooternf.INSTANCE.setShooterVel(velocity),
                 Hoodnf.INSTANCE.setHoodPos(0.3)
         );
     }
@@ -108,7 +110,7 @@ public class s extends SubsystemGroup {
      */
     public Command shooterState(double velocity, double hoodPos) {
         return new ParallelGroup(
-                Shooter.INSTANCE.setShooterVel(velocity),
+                Shooternf.INSTANCE.setShooterVel(velocity),
                 Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }
