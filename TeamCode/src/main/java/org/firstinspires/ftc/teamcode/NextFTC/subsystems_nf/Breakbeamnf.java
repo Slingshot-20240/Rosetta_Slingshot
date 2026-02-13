@@ -19,6 +19,8 @@ public class Breakbeamnf implements Subsystem {
     private DigitalChannel bbmid;
     private DigitalChannel bbhigh;
 
+    private int count = 0;
+    boolean lastDetected = false;
 
     @Override
     public void initialize() {
@@ -32,8 +34,30 @@ public class Breakbeamnf implements Subsystem {
 
     }
 
-    @Override
-    public void periodic() {
+    public void resetCount(){
+        count = 0;
+    }
 
+    public Command setCount(int newCount){
+        return new InstantCommand(() -> count = newCount);
+    }
+
+    @Override
+    public void periodic(){
+        boolean detected = bblow.getState();
+        if (detected && !lastDetected) {
+            count++;
+        }
+
+        lastDetected = detected;
+
+
+        ActiveOpMode.telemetry().addLine(detected ? "object detected" : "no object detected");
+        ActiveOpMode.telemetry().addData("count", count);
+        ActiveOpMode.telemetry().update();
+    }
+
+    public double getCount(){
+        return count;
     }
 }

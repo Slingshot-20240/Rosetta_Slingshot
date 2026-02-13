@@ -5,17 +5,23 @@ import com.bylazar.configurables.annotations.Configurable;
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
+import dev.nextftc.hardware.controllable.Controllable;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
+import dev.nextftc.hardware.impl.VoltageCompensatingMotor;
 
 @Configurable
 public class Shooternf implements Subsystem {
     public static final Shooternf INSTANCE = new Shooternf();
     private Shooternf() { }
 
-    public MotorEx outtake1, outtake2;
-    public MotorGroup shooter;
+    private final MotorEx outtake1 = new MotorEx("outtakeL").reversed();
+    private final MotorEx outtake2 = new MotorEx("outtakeR");
+    private final Controllable outtakeL = new VoltageCompensatingMotor(outtake1, 0.01, 13);
+    private final Controllable outtakeR = new VoltageCompensatingMotor(outtake2, 0.01, 13);
+    public MotorGroup shooter = new MotorGroup(outtakeL, outtakeR);
+;
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(3.5, 0, 0.002)
@@ -53,10 +59,6 @@ public class Shooternf implements Subsystem {
 
     @Override
     public void initialize() {
-        outtake1 = new MotorEx("outtakeTop");
-        outtake2 = new MotorEx("outtakeBot");
-        outtake2.reverse();
-        shooter = new MotorGroup(outtake1, outtake2);
 
         disable();
     }
