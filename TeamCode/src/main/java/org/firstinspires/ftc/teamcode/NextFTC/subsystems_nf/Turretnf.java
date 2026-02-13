@@ -11,15 +11,15 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.impl.CRServoEx;
-public class Turret implements Subsystem {
+public class Turretnf implements Subsystem {
 
     public static double distance;
     // P is pretty much 1/range 
     public static PIDCoefficients turretPIDCoefficients =
             new PIDCoefficients(0.02, 0.0, 0);
 
-    public static final Turret INSTANCE = new Turret();
-    private Turret() {}
+    public static final Turretnf INSTANCE = new Turretnf();
+    private Turretnf() {}
 
     private CRServoEx lTurret = new CRServoEx("lTurret", 0.01);
     private CRServoEx rTurret = new CRServoEx("rTurret", 0.01);

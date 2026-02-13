@@ -7,11 +7,10 @@ import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
-import dev.nextftc.hardware.powerable.SetPower;
 
-public class Transfer implements Subsystem {
-    public static final Transfer INSTANCE = new Transfer();
-    private Transfer() {}
+public class Transfernf implements Subsystem {
+    public static final Transfernf INSTANCE = new Transfernf();
+    private Transfernf() {}
 
     public MotorEx transfer;
     public ServoEx blocker;

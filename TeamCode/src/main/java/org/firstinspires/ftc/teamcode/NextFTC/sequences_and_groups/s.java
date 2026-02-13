@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfer;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooter;
 
 import dev.nextftc.core.commands.Command;
@@ -19,7 +19,7 @@ public class s extends SubsystemGroup {
     public static final s i = new s();
     private s() {
         super(
-                Intakenf.INSTANCE, Transfer.INSTANCE,
+                Intakenf.INSTANCE, Transfernf.INSTANCE,
                 Shooter.INSTANCE, Hoodnf.INSTANCE
         );
 
@@ -37,8 +37,8 @@ public class s extends SubsystemGroup {
     public Command shootSequence(double shootTime, PathChain pathChain) {
         return new SequentialGroup(
                 new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                Transfer.INSTANCE.open(),
-                Transfer.INSTANCE.on(),
+                Transfernf.INSTANCE.open(),
+                Transfernf.INSTANCE.on(),
                 new Delay(shootTime)
         );
     }
@@ -52,10 +52,10 @@ public class s extends SubsystemGroup {
      */
     public Command shoot(double shootTime) {
         return new SequentialGroup(
-                Transfer.INSTANCE.open(),
-                Transfer.INSTANCE.on(),
+                Transfernf.INSTANCE.open(),
+                Transfernf.INSTANCE.on(),
                 new Delay(shootTime),
-                Transfer.INSTANCE.close()
+                Transfernf.INSTANCE.close()
         );
     }
 
@@ -67,10 +67,10 @@ public class s extends SubsystemGroup {
      */
     public Command intakeSequence() {
         return new ParallelGroup(
-                Transfer.INSTANCE.close(),
+                Transfernf.INSTANCE.close(),
                 Intakenf.INSTANCE.downAndOn(),
 //                new WaitUntil(() -> /* beam break senses first ball (highest beam break) */)
-                Transfer.INSTANCE.off()
+                Transfernf.INSTANCE.off()
         );
     }
 
@@ -82,7 +82,7 @@ public class s extends SubsystemGroup {
     public Command goScoreSequence() {
         return new SequentialGroup(
                 Intakenf.INSTANCE.up(),
-                Transfer.INSTANCE.off()
+                Transfernf.INSTANCE.off()
         );
     }
 
