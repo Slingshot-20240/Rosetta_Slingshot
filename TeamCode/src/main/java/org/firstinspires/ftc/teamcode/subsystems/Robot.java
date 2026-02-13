@@ -1,18 +1,12 @@
-package org.firstinspires.ftc.teamcode.subsystems.robot;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
-import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
-import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.park.Park;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transfer.TransferM;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
+import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
 public class Robot {
 // CONFIG
@@ -38,7 +32,6 @@ public class Robot {
     // MECHANISMS
     public final IMU imu;
     public Intake intake;
-    //public Transfer transfer;
     public TransferM transfer;
     public Shooter shooter;
     public Drivetrain drivetrain;

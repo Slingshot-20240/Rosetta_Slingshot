@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
+import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
 public class Drivetrain {
     // HARDWARE (I (Ishaan) added Final when changing from pedro)

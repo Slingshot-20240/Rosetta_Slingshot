@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.shooter;
+package org.firstinspires.ftc.teamcode.teleop.opModes.pid;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
-import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 
