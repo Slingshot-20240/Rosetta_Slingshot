@@ -15,24 +15,25 @@ public class Robot {
     // front - 0
     // back - 1
 
-
     // servo variableHood    control hub 5
-    // servo transferB       control hub 2
+    // servo stopper         control hub 2
 
     // servo park            expansion hub 5
 
     // motor outtakeTop      control hub 2
     // motor outtakeBot      control hub 3
 
-    // motor transferF       expansion hub port 2
-    // motor intake          expansion hub port 3
+    // motor intake1         expansion hub port _
+    // motor intake2         expansion hub port _
 
     // led                   control hub 6-7
 
+    // beambreaks            ---------------
+
     // MECHANISMS
     public final IMU imu;
-    public Intake intake;
-    public TransferM transfer;
+    public IntakeTransfer intakeTransfer;
+    public Stopper stopper;
     public Shooter shooter;
     public Drivetrain drivetrain;
 
@@ -61,9 +62,8 @@ public class Robot {
 
         cam = new logi(hardwareMap);
 
-        intake = new Intake(hardwareMap);
-        // transfer = new Transfer(hardwareMap);
-        transfer = new TransferM(hardwareMap);
+        intakeTransfer = new IntakeTransfer(hardwareMap);
+        stopper = new Stopper(hardwareMap);
         shooter = new Shooter(hardwareMap);
         park = new Park(hardwareMap);
 
@@ -78,25 +78,17 @@ public class Robot {
     }
 
     public Robot(GamepadMapping controls, IMU imu, GoBildaPinpointDriver pinpoint,
-                 logi cam, Intake intake, TransferM transfer, Shooter shooter, Drivetrain dt,
+                 logi cam, IntakeTransfer intakeTransfer, Stopper stopper, Shooter shooter, Drivetrain dt,
                  DigitalChannel led0, DigitalChannel led1, Park park) {
         this.controls = controls;
         this.imu = imu;
         this.driver = pinpoint;
-        // this.cam = cam;
-        this.intake = intake;
-        this.transfer = transfer;
+        this.intakeTransfer = intakeTransfer;
+        this.stopper = stopper;
         this.shooter = shooter;
         this.drivetrain = dt;
         this.ledBoard0 = led0;
         this.ledBoard1 = led1;
         this.park = park;
-    }
-
-    public void hardwareSoftReset() {
-        transfer.transferOff();
-        shooter.hoodToBack();
-        intake.intakeOff();
-        shooter.setShooterVelocity(0);
     }
 }

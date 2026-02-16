@@ -11,10 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
+import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
 
 @Config
@@ -30,7 +29,6 @@ public class ShooterPID extends OpMode {
     public static double hoodPos = 0.1;
     Robot robot;
     GamepadMapping controls;
-    FSM fsm;
     Drivetrain drivetrain;
 
     @Override
@@ -51,8 +49,6 @@ public class ShooterPID extends OpMode {
 
         flywheel2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        fsm = new FSM(hardwareMap, controls, robot);
-
         drivetrain = new Drivetrain(hardwareMap, robot.imu, controls);
     }
 
@@ -65,18 +61,18 @@ public class ShooterPID extends OpMode {
         // Updates all other controls
         controls.update();
 
-        //robot.intake.intakeOn();
+        robot.intakeTransfer.intakeTransferOn();
 
-        if (controls.transfer.locked()) {
-            robot.transfer.transferOn();
+        if (controls.transfer.value()) {
+            robot.stopper.release();
         } else {
-            robot.transfer.hotDog();
+            robot.stopper.stop();
         }
 
         if (controls.outtake.locked()) {
-            robot.intake.intakeReverse();
+            robot.intakeTransfer.intakeTransferReverse();
         } else {
-            robot.intake.intakeOn();
+            robot.intakeTransfer.intakeTransferOn();
         }
 
         //sine wave/variable setpoint between 2000 and 5000 ticks/sec
