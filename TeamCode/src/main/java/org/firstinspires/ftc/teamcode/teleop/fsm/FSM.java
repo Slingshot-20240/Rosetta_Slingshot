@@ -35,6 +35,8 @@ public class FSM {
         stopper = robot.stopper;
         park = robot.park;
         shooter = robot.shooter;
+
+        savedType = ControlType.PID_CONTROL;
     }
 
     public void update() {
@@ -43,26 +45,13 @@ public class FSM {
         switch (state) {
             case BASE_STATE:
 
-                // test, should work
-    //                if (gamepad.switchMode.value()) {
-    //                    if(type == ControlType.HARDCODED_CONTROL) {
-    //                        savedType = ControlType.HARDCODED_CONTROL;
-    //                        type = ControlType.PID_CONTROL;
-    //                    } else {
-    //                        savedType = ControlType.PID_CONTROL;
-    //                        type = ControlType.HARDCODED_CONTROL;
-    //                    }
-    //                } else {
-    //                    type = savedType;
-    //                }
-
                 // Park toggle
                 if (gamepad.park.value()) {
                     state = FSMStates.PARK;
                 }
 
                 // Stopper toggle
-                if (gamepad.transfer.value()) {
+                if (gamepad.transfer.value() && type == ControlType.PID_CONTROL) {
                     intakeTransfer.intakeTransferOn();
                     stopper.release();
                 } else {
@@ -121,6 +110,18 @@ public class FSM {
                 }
 
                 // --------------- Hardcoded Only ---------------
+                if (gamepad.switchMode.value()) {
+                    // if saved is PID (in PID mode), switch to Hardcoded
+                    if (savedType == ControlType.PID_CONTROL) {
+                        type = ControlType.HARDCODED_CONTROL;
+                        savedType = ControlType.HARDCODED_CONTROL;
+
+                    // if saved is Hardcoded (in Hardcoded mode), switch to PID
+                    } else if (savedType == ControlType.HARDCODED_CONTROL) {
+                        type = ControlType.PID_CONTROL;
+                        savedType = ControlType.PID_CONTROL;
+                    }
+                }
 
                 if (type == ControlType.HARDCODED_CONTROL) {
                     shooter.shootFromFront();

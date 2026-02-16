@@ -16,7 +16,7 @@ public class GamepadMapping {
     // INTAKE
     public Toggle intake;
 
-    // SHOOTER
+    // SHOOTER - GP2
     public Toggle shootBack;
     public Toggle shootFront;
 
@@ -54,21 +54,21 @@ public class GamepadMapping {
     public void update() {
         joystickUpdate();
         // INTAKE
-        intake.update(gamepad1.right_trigger >= 0.5);
-
-        // SHOOTER
-        shootBack.update(gamepad1.left_trigger >= 0.5);
-        shootFront.update(gamepad1.left_bumper);
+        intake.update(gamepad1.left_bumper);
 
         // TRANSFER
-        transfer.update(gamepad1.left_bumper);
+        transfer.update(gamepad1.right_bumper);
 
         // OUTTAKE
-        outtake.update(gamepad1.y);
+        outtake.update(gamepad1.left_trigger >= 0.3);
 
         // MISC
         switchMode.update(gamepad1.dpad_down);
-        park.update(gamepad1.dpad_up);
+        park.update(gamepad1.x);
+
+        // SHOOTER - FOR HARDCODED ONLY
+        shootBack.update(gamepad1.right_trigger >= 0.3);
+        shootFront.update(gamepad1.right_bumper);
     }
 
     public void resetMultipleControls(Toggle... toggles) {
