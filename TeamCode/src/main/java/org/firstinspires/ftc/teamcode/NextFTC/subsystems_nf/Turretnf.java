@@ -35,11 +35,11 @@ public class Turretnf implements Subsystem {
     public double power;
     public static Double targetTurretAng = 0.0;
     private static double offset = 4.0;
-    private static final double GEAR_RATIO = 3.25;
+    private static final double GEAR_RATIO = 1.083;
 
     // Got MIN and MAX from 180/ Gear Ratio and then added some tolerance
-    private static final double TURRET_MIN_DEG = -50;
-    private static final double TURRET_MAX_DEG =  50;
+    private static final double TURRET_MIN_DEG = -100;
+    private static final double TURRET_MAX_DEG =  100;
     public static boolean AUTO_AIM = true;
 
     Pose goal = new Pose(141.5,141.5);
@@ -49,7 +49,7 @@ public class Turretnf implements Subsystem {
     public void initialize() {
         //left turret encoder, right turret encoder
         lTurretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "lte");
-        lTurretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "rte");
+        rTurretEncoder = ActiveOpMode.hardwareMap().get(AnalogInput.class, "rte");
     }
 
     @Override
@@ -110,6 +110,7 @@ public class Turretnf implements Subsystem {
         //TODO - may need to change max voltage
         //yeah so voltage is what feedback get from servo and its pretty much a linear graph so all you need to do is divide by max voltage which is 3.3. And then i just multiply by 360 to go into degrees you could do radians but i dont like radians
         double servoDeg = (lTurretEncoder.getVoltage() / 3.3) * 360.0;
+        //TODO - NOTE we are NOT using the right encoder right now!!! we may want to average them we'll see
 
         // convert to turret degrees
         return normalizeAngle(servoDeg) / GEAR_RATIO;

@@ -2,14 +2,8 @@ package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
-import dev.nextftc.control.ControlSystem;
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
-import dev.nextftc.hardware.impl.MotorEx;
-import dev.nextftc.hardware.impl.ServoEx;
 
 public class Breakbeamnf implements Subsystem {
     public static final Breakbeamnf INSTANCE = new Breakbeamnf();
@@ -20,7 +14,6 @@ public class Breakbeamnf implements Subsystem {
     private DigitalChannel bbhigh;
 
     private int count = 0;
-    boolean lastDetected = false;
 
     @Override
     public void initialize() {
@@ -31,33 +24,34 @@ public class Breakbeamnf implements Subsystem {
         bblow.setMode(DigitalChannel.Mode.INPUT);
         bbmid.setMode(DigitalChannel.Mode.INPUT);
         bbhigh.setMode(DigitalChannel.Mode.INPUT);
-
     }
 
     public void resetCount(){
         count = 0;
     }
 
-    public Command setCount(int newCount){
-        return new InstantCommand(() -> count = newCount);
-    }
-
     @Override
     public void periodic(){
-        boolean detected = bblow.getState();
-        if (detected && !lastDetected) {
-            count++;
-        }
+        // True if the sensor is blocked by a ball
+        boolean lowBlocked = !bblow.getState();   // DigitalChannel returns true when NOT blocked
+        boolean midBlocked = !bbmid.getState();
+        boolean highBlocked = !bbhigh.getState();
 
-        lastDetected = detected;
+        // Count the number of balls in intake
+        count = 0;
+        if(lowBlocked) count++;
+        if(midBlocked) count++;
+        if(highBlocked) count++;
 
-
-        ActiveOpMode.telemetry().addLine(detected ? "object detected" : "no object detected");
-        ActiveOpMode.telemetry().addData("count", count);
+        // Telemetry
+        ActiveOpMode.telemetry().addLine(lowBlocked ? "Low blocked" : "Low clear");
+        ActiveOpMode.telemetry().addLine(midBlocked ? "Mid blocked" : "Mid clear");
+        ActiveOpMode.telemetry().addLine(highBlocked ? "High blocked" : "High clear");
+        ActiveOpMode.telemetry().addData("Balls in intake", count);
         ActiveOpMode.telemetry().update();
     }
 
-    public double getCount(){
+    public int getCount(){
         return count;
     }
 }

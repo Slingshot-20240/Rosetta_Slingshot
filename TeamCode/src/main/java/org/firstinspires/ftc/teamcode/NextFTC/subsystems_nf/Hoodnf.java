@@ -19,15 +19,15 @@ public class Hoodnf implements Subsystem {
     // ------------------ AUTONOMOUS COMMANDS ------------------ //
 
     public Command closeSide() {
-        return new SetPosition(variableHood, 0.4).requires(this);
+        return new InstantCommand(() -> variableHood.getServo().setPosition(0.4)).requires(this);
     }
 
     public Command farSide() {
-        return new SetPosition(variableHood, 0.42).requires(this);
+        return new InstantCommand(() -> variableHood.getServo().setPosition(0.3)).requires(this);
     }
 
     public Command setHoodPos(double hoodPosition) {
-        return new SetPosition(variableHood, hoodPosition).requires(this);
+        return new InstantCommand(() -> variableHood.getServo().setPosition(hoodPosition)).requires(this);
     }
 
 }
