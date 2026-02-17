@@ -5,17 +5,17 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class IntakeTransfer {
+public class Intake {
     public final DcMotorEx intake1;
     public final DcMotorEx intake2;
 
     public final DigitalChannel beamBreakLow, beamBreakMid, beamBreakHigh;
 
-    private int count= 0;
+    private int count = 0;
     private boolean lastDetected = false;
 
 
-    public IntakeTransfer(HardwareMap hardwareMap) {
+    public Intake(HardwareMap hardwareMap) {
         intake1 = hardwareMap.get(DcMotorEx.class, "intake1");
         intake2 = hardwareMap.get(DcMotorEx.class, "intake2");
         intake1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -31,8 +31,8 @@ public class IntakeTransfer {
     }
 
     // constructor for JUnit
-    public IntakeTransfer(DcMotorEx intake1, DcMotorEx intake2,
-                          DigitalChannel bb1, DigitalChannel bb2, DigitalChannel bb3) {
+    public Intake(DcMotorEx intake1, DcMotorEx intake2,
+                  DigitalChannel bb1, DigitalChannel bb2, DigitalChannel bb3) {
         this.intake2 = intake2;
         this.intake1 = intake1;
 

@@ -61,18 +61,18 @@ public class ShooterPID extends OpMode {
         // Updates all other controls
         controls.update();
 
-        robot.intakeTransfer.intakeTransferOn();
+        robot.intake.intakeTransferOn();
 
         if (controls.transfer.value()) {
-            robot.stopper.release();
+            robot.stopper.close();
         } else {
-            robot.stopper.stop();
+            robot.stopper.open();
         }
 
         if (controls.outtake.locked()) {
-            robot.intakeTransfer.intakeTransferReverse();
+            robot.intake.intakeTransferReverse();
         } else {
-            robot.intakeTransfer.intakeTransferOn();
+            robot.intake.intakeTransferOn();
         }
 
         //sine wave/variable setpoint between 2000 and 5000 ticks/sec
