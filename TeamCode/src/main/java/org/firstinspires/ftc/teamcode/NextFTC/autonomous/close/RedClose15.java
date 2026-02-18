@@ -17,13 +17,16 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.WaitUntil;
+import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -37,7 +40,7 @@ public class RedClose15 extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, s.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Shooternf.INSTANCE, Stoppernf.INSTANCE,
                         Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -164,9 +167,8 @@ public class RedClose15 extends NextFTCOpMode {
     }
 
     private Command init_bot() {
-        return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.35),
-                Intakenf.INSTANCE.down()
+        return new SequentialGroup(
+                Hoodnf.INSTANCE.setHoodPos(0.35)
         );
 
     }
@@ -174,14 +176,15 @@ public class RedClose15 extends NextFTCOpMode {
     private Command autonomous() {
         return new SequentialGroup(
 
-                //Score Preloads
-                new ParallelGroup(
-                        f.i.follow(scorePreloads),
 
-                        s.i.goScoreSequence(),
-                        s.i.shooterState(1250,0.35),
-                        s.i.shootSequence(scorePreloads, 0.4)
+                new ParallelDeadlineGroup(
+                        s.i.shootSequence(scorePreloads, 0.9),
+
+                        new FollowPath(scorePreloads),
+                        s.i.shooterState(1250,0.35)
                 ),
+
+
 
                 //Set 2
                 new ParallelGroup(

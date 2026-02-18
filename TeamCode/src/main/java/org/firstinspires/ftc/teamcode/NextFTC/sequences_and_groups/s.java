@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Breakbeamnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 
 
 import dev.nextftc.core.commands.Command;
@@ -15,6 +16,7 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.SubsystemGroup;
 
 //AUTON SEQUENCES CLOSE
@@ -22,7 +24,7 @@ public class s extends SubsystemGroup {
     public static final s i = new s();
     private s() {
         super(
-                Intakenf.INSTANCE, Transfernf.INSTANCE,
+                Intakenf.INSTANCE, Stoppernf.INSTANCE,
                 Shooternf.INSTANCE, Hoodnf.INSTANCE
         );
 
@@ -40,8 +42,15 @@ public class s extends SubsystemGroup {
     public Command shootSequence(PathChain pathChain, double shootTime) {
         return new SequentialGroup(
                 new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                Transfernf.INSTANCE.shootSet(),
-                new Delay(shootTime)
+                shoot(shootTime)
+        );
+    }
+
+    public Command shootSequence(PathChain pathChain, double shootTime, double spinUpTime) {
+        return new SequentialGroup(
+                new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
+                new Delay(spinUpTime),
+                shoot(shootTime)
         );
     }
 
@@ -54,41 +63,11 @@ public class s extends SubsystemGroup {
      */
     public Command shoot(double shootTime) {
         return new SequentialGroup(
-                Transfernf.INSTANCE.shootSet(),
+                Stoppernf.INSTANCE.open(),
                 new Delay(shootTime)
         );
     }
 
-    /**
-     * Intake down, and on throughout
-     * Blocker closed
-     * Transfer on until first ball detected
-     * @return
-     */
-    public Command intakeSequence() {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.downAndOn(),
-                Transfernf.INSTANCE.close(),
-
-                new SequentialGroup(
-                        Transfernf.INSTANCE.on(),
-                        new WaitUntil(() -> Breakbeamnf.INSTANCE.getCount() >= 1), //try == if this doesn't work
-                        Transfernf.INSTANCE.off()
-                )
-        );
-    }
-
-    /**
-     * Intake up, and on throughout
-     * Transfer off
-     * @return
-     */
-    public Command goScoreSequence() {
-        return new SequentialGroup(
-                Intakenf.INSTANCE.upAndOn(),
-                Transfernf.INSTANCE.off()
-        );
-    }
 
     /**
      * Sets shooter speed
