@@ -188,52 +188,44 @@ public class RedClose15 extends NextFTCOpMode {
 
                 //Set 2
                 new ParallelGroup(
-                        f.i.follow(grabSet2),
-                        s.i.intakeSequence()
+                        f.i.follow(grabSet2)
                 ),
                 new ParallelGroup(
                         f.i.follow(scoreSet2),
 
-                        s.i.goScoreSequence(),
                         s.i.shooterState(1250,0.35), //if the robot is stuck try taking out this lien
                         s.i.shootSequence(scoreSet2, 0.4)
                 ),
 
                 //Set 3
                 new ParallelGroup(
-                        f.i.follow(grabSet3),
-                        s.i.intakeSequence()
+                        f.i.follow(grabSet3)
                 ),
                 new ParallelGroup(
                         f.i.follow(scoreSet3),
 
-                        s.i.goScoreSequence(),
                         s.i.shooterState(1250,0.35), //if the robot is stuck try taking out this lien
                         s.i.shootSequence(scoreSet3, 0.4)
                 ),
 
                 //Set 4
                 new ParallelGroup(
-                        f.i.follow(grabSet4),
-                        s.i.intakeSequence()
+                        f.i.follow(grabSet4)
                 ),
                 new ParallelGroup(
                         f.i.follow(scoreSet4),
 
-                        s.i.goScoreSequence(),
                         s.i.shooterState(1250,0.35), //if the robot is stuck try taking out this lien
                         s.i.shootSequence(scoreSet4, 0.4)
                 ),
 
                 //Human Player
                 new ParallelGroup(
-                        f.i.follow(grabHp),
-                        s.i.intakeSequence()
+                        f.i.follow(grabHp)
                 ),
                 new ParallelGroup(
                         f.i.follow(scoreHp),
 
-                        s.i.goScoreSequence(),
                         s.i.shooterState(1250,0.35), //if the robot is stuck try taking out this lien
                         s.i.shootSequence(scoreHp, 0.4)
                 )
