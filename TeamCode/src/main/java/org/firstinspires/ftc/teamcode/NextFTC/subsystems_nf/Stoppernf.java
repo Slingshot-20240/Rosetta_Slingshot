@@ -15,7 +15,7 @@ public class Stoppernf implements Subsystem {
     public Command close() {
         return new InstantCommand(() -> blocker.getServo().setPosition(0.2));
     }
-    public Command up() {
+    public Command open() {
         return new InstantCommand(() -> blocker.getServo().setPosition(0.4));
     }
 

@@ -12,6 +12,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.*;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.*;
 
@@ -19,6 +20,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
 
+import dev.nextftc.core.commands.delays.WaitUntil;
+import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 
@@ -36,9 +39,8 @@ public class SimpleAutonTest extends NextFTCOpMode {
         addComponents(
                 new SubsystemComponent(
                         f.i, s.i,
-                        Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, MTransfernf.INSTANCE,
-                        Lednf.INSTANCE, Loginf.INSTANCE
+                        Intakenf.INSTANCE, Stoppernf.INSTANCE,
+                        Shooternf.INSTANCE, Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
@@ -46,63 +48,63 @@ public class SimpleAutonTest extends NextFTCOpMode {
     }
 
 
-    public PathChain adjust;
 
-    public PathChain scorePreloads;
+    public PathChain scorePreloads_grabSet2;
 
-    public PathChain grabSet2, scoreSet2;
+    public PathChain scoreSet2;
 
     public Pose scorePose = new Pose(87,87);
-    double atErrorDeg;
 
     public void buildPaths() {
 
         follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
 
-        scorePreloads = follower().pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(126.2, 119), scorePose)
-                )
-                .addParametricCallback(0.5, () -> asc.i.transferUpFor(2))
-                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(50))
-                .build();
-
-        adjust = follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(follower()::getPose, follower()::getPose)
-                )
-
-                .setHeadingInterpolation(
-                        HeadingInterpolator.lazy(() -> {
-                            double start = follower().getHeading();
-                            double end = start + Math.toRadians(Loginf.INSTANCE.getATangle());
-
-                            return HeadingInterpolator.linear(start, end);
-                        })
-                )
-
-                .build();
-
-        grabSet2 = PedroComponent.follower()
-                .pathBuilder()
+        scorePreloads_grabSet2 = PedroComponent.follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                scorePose,
-                                new Pose(92.292,77),
-                                new Pose(126.5, 79)
+                                new Pose(126.2, 119),
+                                //TODO - try working with increasing x below, this makes it not go as far left for shooting
+                                // position. This means lower shooter speed and make hood lower for more arc
+                                new Pose(55.400, 76.100),
+                                new Pose(103.389, 85.000),
+                                new Pose(127.000, 83.000)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
-
+                .setHeadingInterpolation(
+                        HeadingInterpolator.piecewise(
+                                        new HeadingInterpolator.PiecewiseNode(
+                                                0,
+                                                0.1,
+                                                HeadingInterpolator.constant(Math.toRadians(36))
+                                        ),
+                                        new HeadingInterpolator.PiecewiseNode(
+                                                0.1,
+                                                0.45,
+                                                HeadingInterpolator.facingPoint(141.5, 141.5)
+                                        ),
+                                        new HeadingInterpolator.PiecewiseNode(
+                                                0.45,
+                                                1.0,
+                                                HeadingInterpolator.linearFromPoint(
+                                                        //TODO - whatever current pose is, not 45 degrees hardcoded
+                                                        () -> follower().getHeading(),
+                                                        Math.toRadians(0),
+                                                        0.995
+                                                )
+                                        )
+                                )
+                )
+                .addParametricCallback(0.35, () -> follower().setMaxPower(0.35))
+                .addParametricCallback(0.45, () -> follower().setMaxPower(1.0))
 
                 .build();
+
 
 
         scoreSet2 = follower().pathBuilder()
                 //Score Set 2
                 .addPath(
-                        new BezierLine(new Pose(126.5, 79), scorePose)
+                        new BezierLine(new Pose(127, 83), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
                 //was 0
@@ -113,11 +115,9 @@ public class SimpleAutonTest extends NextFTCOpMode {
     }
 
 
-    //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.33),
-                MTransfernf.INSTANCE.idle()
+                Hoodnf.INSTANCE.setHoodPos(0.3)
         );
 
     }
@@ -126,13 +126,19 @@ public class SimpleAutonTest extends NextFTCOpMode {
     private Command autonomous() {
         return new SequentialGroup(
 
-                new ParallelGroup(
-                        f.i.follow(scorePreloads, "green"),
-                        asc.i.baseState(-1260),
-                        MTransfernf.INSTANCE.hotdog()
+                new ParallelDeadlineGroup(
+                        f.i.follow(scorePreloads_grabSet2, "green"),
+
+                        Shooternf.INSTANCE.setShooterVel(-1190),
+                        s.i.shootAt(follower(), scorePreloads_grabSet2, 2, 0.35)
                 ),
-                f.i.follow(adjust,"red"),
-                Lednf.INSTANCE.color("green")
+
+                new ParallelDeadlineGroup(
+                        s.i.shootSequence(scoreSet2,2),
+
+                        s.i.shooterState(-1210,0.33),
+                        f.i.follow(scoreSet2,"green")
+                )
 
 
         );
@@ -152,18 +158,10 @@ public class SimpleAutonTest extends NextFTCOpMode {
     public void onStartButtonPressed() {
         Shooternf.INSTANCE.enable();
         autonomous().schedule();
-
-
     }
 
     @Override
     public void onUpdate() {
-
-        atErrorDeg = Loginf.INSTANCE.getATangle();
-        telemetry.addData("atErrorDeg", atErrorDeg);
-        telemetry.addData("ATangle", Loginf.INSTANCE.getATangle());
-        telemetry.update();
-
     }
 
 
