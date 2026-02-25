@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.vision;
+package org.firstinspires.ftc.teamcode.NextFTC.misc.vision;
 
 
 import static org.opencv.imgproc.Imgproc.COLOR_GRAY2RGBA;

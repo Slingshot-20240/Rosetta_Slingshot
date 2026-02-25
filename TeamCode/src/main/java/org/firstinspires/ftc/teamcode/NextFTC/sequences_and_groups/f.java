@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.vision.Logi;
+import org.firstinspires.ftc.teamcode.NextFTC.misc.vision.Logi;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;

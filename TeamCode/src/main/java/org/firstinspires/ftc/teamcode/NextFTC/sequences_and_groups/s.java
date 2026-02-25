@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Breakbeamnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
@@ -16,7 +14,6 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.SubsystemGroup;
 
 //AUTON SEQUENCES CLOSE
@@ -63,7 +60,7 @@ public class s extends SubsystemGroup {
      */
     public Command shoot(double shootTime) {
         return new SequentialGroup(
-                Stoppernf.INSTANCE.open(),
+                Stoppernf.INSTANCE.up(),
                 new Delay(shootTime)
         );
     }

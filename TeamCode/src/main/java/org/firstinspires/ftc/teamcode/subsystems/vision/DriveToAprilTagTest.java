@@ -293,7 +293,7 @@ public class DriveToAprilTagTest extends LinearOpMode
      This can only be called AFTER calling initAprilTag(), and only works for Webcams;
     */
     private void    setManualExposure(int exposureMS, int gain) {
-        // Wait for the camera to be open, then use the controls
+        // Wait for the camera to be up, then use the controls
 
         if (visionPortal == null) {
             return;

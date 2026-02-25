@@ -54,6 +54,7 @@ public class GamepadMapping {
     public void update() {
         joystickUpdate();
         // INTAKE
+        //TODO - make toggle
         intake.update(gamepad1.left_bumper);
 
         // TRANSFER
