@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 @Config
 @TeleOp
