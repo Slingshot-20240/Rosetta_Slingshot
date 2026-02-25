@@ -8,15 +8,11 @@ import dev.nextftc.hardware.positionable.SetPosition;
 
 public class Hoodnf implements Subsystem {
 
-    // ------------------ INSTANCES ------------------ //
-
     public static final Hoodnf INSTANCE = new Hoodnf();
 
     private Hoodnf() {}
 
     private final ServoEx variableHood = new ServoEx("variableHood",-0.1);
-
-    // ------------------ AUTONOMOUS COMMANDS ------------------ //
 
     public Command closeSide() {
         return new InstantCommand(() -> variableHood.getServo().setPosition(0.4)).requires(this);

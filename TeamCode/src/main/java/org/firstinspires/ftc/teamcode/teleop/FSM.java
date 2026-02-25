@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.subsystems.IntakeTransfer;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Park;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -18,7 +18,7 @@ public class FSM {
     private final GamepadMapping gamepad;
 
     // --------------- SUBSYSTEMS ---------------
-    private final IntakeTransfer intakeTransfer;
+    private final Intake intake;
     private final Stopper stopper;
     private final Shooter shooter;
     private final Park park;
@@ -38,7 +38,7 @@ public class FSM {
         this.robot = robot;
         this.gamepad = robot.controls;
 
-        intakeTransfer = robot.intakeTransfer;
+        intake = robot.intake;
         stopper = robot.stopper;
         park = robot.park;
         shooter = robot.shooter;
@@ -59,10 +59,10 @@ public class FSM {
 
                 // Stopper toggle
                 if (gamepad.transfer.value() && type == ControlType.PID_CONTROL) {
-                    intakeTransfer.intakeTransferOn();
-                    stopper.release();
+                    intake.intakeTransferOn();
+                    stopper.close();
                 } else {
-                    stopper.stop();
+                    stopper.open();
                 }
 
                 // Outtake hold
@@ -72,9 +72,9 @@ public class FSM {
 
                 // Intake hold
                 if (gamepad.intake.locked()) {
-                    intakeTransfer.intakeTransferOn();
+                    intake.intakeTransferOn();
                 } else {
-                    intakeTransfer.intakeTransferOff();
+                    intake.intakeTransferOff();
                 }
 
                 // --------------- PID Only ---------------
@@ -151,7 +151,7 @@ public class FSM {
                 break;
 
             case OUTTAKING:
-                intakeTransfer.intakeTransferReverse();
+                intake.intakeTransferReverse();
 
                 if (!gamepad.outtake.locked()) {
                     state = FSMStates.BASE_STATE;
@@ -161,8 +161,8 @@ public class FSM {
 
             case PID_SHOOT:
 
-                intakeTransfer.intakeTransferOn();
-                stopper.release();
+                intake.intakeTransferOn();
+                stopper.close();
 
                 if (!gamepad.transfer.locked()) {
                     state = FSMStates.BASE_STATE;
@@ -186,9 +186,9 @@ public class FSM {
 
                 shooter.shootFromBack();
                 shooter.hoodToBack();
-                intakeTransfer.intakeTransferOn();
+                intake.intakeTransferOn();
 
-                stopper.release();
+                stopper.close();
 
                 if (!gamepad.shootBack.locked()) {
                     state = FSMStates.BASE_STATE;
@@ -199,11 +199,11 @@ public class FSM {
 
             case SHOOT_FRONT:
 
-                intakeTransfer.intakeTransferOn();
+                intake.intakeTransferOn();
                 shooter.shootFromFront();
                 shooter.hoodToFront();
 
-                stopper.release();
+                stopper.close();
 
                 if (!gamepad.shootFront.locked()) {
                     state = FSMStates.BASE_STATE;

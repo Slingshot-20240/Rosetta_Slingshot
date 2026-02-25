@@ -32,7 +32,7 @@ public class Robot {
 
     // MECHANISMS
     public final IMU imu;
-    public IntakeTransfer intakeTransfer;
+    public Intake intake;
     public Stopper stopper;
     public Shooter shooter;
     public Drivetrain drivetrain;
@@ -62,7 +62,7 @@ public class Robot {
 
         cam = new logi(hardwareMap);
 
-        intakeTransfer = new IntakeTransfer(hardwareMap);
+        intake = new Intake(hardwareMap);
         stopper = new Stopper(hardwareMap);
         shooter = new Shooter(hardwareMap);
         park = new Park(hardwareMap);
@@ -78,12 +78,12 @@ public class Robot {
     }
 
     public Robot(GamepadMapping controls, IMU imu, GoBildaPinpointDriver pinpoint,
-                 logi cam, IntakeTransfer intakeTransfer, Stopper stopper, Shooter shooter, Drivetrain dt,
+                 logi cam, Intake intake, Stopper stopper, Shooter shooter, Drivetrain dt,
                  DigitalChannel led0, DigitalChannel led1, Park park) {
         this.controls = controls;
         this.imu = imu;
         this.driver = pinpoint;
-        this.intakeTransfer = intakeTransfer;
+        this.intake = intake;
         this.stopper = stopper;
         this.shooter = shooter;
         this.drivetrain = dt;
