@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.fsm;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -26,6 +26,13 @@ public class FSM {
     // --------------- MISC ---------------
     public double lastVelo = 800;
     private ControlType savedType;
+    private double FAR_THRESHOLD = 110; // TODO tune threshold
+
+    // furthest forward for far shots
+    private double MAX_HOOD_POS = 0.1;
+    // furthest down for close shots
+    private double MIN_HOOD_POS = 0.6;
+    private double HOOD_OFFSET = 0.1; // TODO tune offset
 
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
@@ -95,8 +102,13 @@ public class FSM {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
                         robot.shooter.setShooterVelocity(-lastVelo);
                     } else {
-                        robot.shooter.setHoodAngle(targetHoodPos);
-                        robot.shooter.setShooterVelocity(-targetVelocity);
+                        // get position will get last passed position so uh hopefully that should work
+                        if (Robot.cam.getTargetArtifactTravelDistanceX() > FAR_THRESHOLD && robot.shooter.variableHood.getPosition() < MAX_HOOD_POS - HOOD_OFFSET) {
+                            robot.shooter.setHoodAngle(targetHoodPos + HOOD_OFFSET); // TODO tune offset
+                        } else {
+                            robot.shooter.setHoodAngle(targetHoodPos);
+                        }
+                        robot.shooter.setShooterVelocity(-targetVelocity); // TODO maybe add offset
                     }
 
                     // set LED states

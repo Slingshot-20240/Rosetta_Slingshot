@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
+import org.firstinspires.ftc.teamcode.teleop.FSM;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
 @TeleOp(name="FSMTest", group="Testing")
