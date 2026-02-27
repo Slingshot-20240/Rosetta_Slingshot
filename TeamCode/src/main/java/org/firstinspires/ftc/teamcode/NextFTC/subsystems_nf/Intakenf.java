@@ -32,6 +32,9 @@ public class Intakenf implements Subsystem {
         return new SetPower(intake, -1.0);
     }
 
+    public Command setIntakePower(double power) {
+        return new SetPower(intake, power);
+    }
 
 
     @Override
@@ -44,5 +47,5 @@ public class Intakenf implements Subsystem {
 
     @Override
     public void periodic() {}
-    
+
 }
