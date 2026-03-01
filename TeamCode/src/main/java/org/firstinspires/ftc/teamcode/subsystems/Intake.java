@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
     public final DcMotorEx intake1;
-    public final DcMotorEx intake2;
+    public final DcMotorEx dropdownIntake;
 
     public final DigitalChannel beamBreakLow, beamBreakMid, beamBreakHigh;
 
@@ -17,9 +17,9 @@ public class Intake {
 
     public Intake(HardwareMap hardwareMap) {
         intake1 = hardwareMap.get(DcMotorEx.class, "intake1");
-        intake2 = hardwareMap.get(DcMotorEx.class, "intake2");
+        dropdownIntake = hardwareMap.get(DcMotorEx.class, "dropdownIntake");
         intake1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dropdownIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         beamBreakLow = hardwareMap.get(DigitalChannel.class, "bbl");
         beamBreakMid = hardwareMap.get(DigitalChannel.class, "bbm");
@@ -33,7 +33,7 @@ public class Intake {
     // constructor for JUnit
     public Intake(DcMotorEx intake1, DcMotorEx intake2,
                   DigitalChannel bb1, DigitalChannel bb2, DigitalChannel bb3) {
-        this.intake2 = intake2;
+        this.dropdownIntake = intake2;
         this.intake1 = intake1;
 
         beamBreakLow = bb1;
@@ -44,17 +44,17 @@ public class Intake {
 //-------------------------------------------------------------------------------
 
     public void intakeTransferOn() {
-        intake2.setPower(1);
+        dropdownIntake.setPower(1);
         intake1.setPower(1);
     }
 
     public void intakeTransferOff() {
         intake1.setPower(0);
-        intake2.setPower(0);
+        dropdownIntake.setPower(0);
     }
 
     public void intakeTransferReverse() {
-        intake2.setPower(-1);
+        dropdownIntake.setPower(-1);
         intake1.setPower(-1);
     }
 
