@@ -15,12 +15,12 @@ public class Stopper {
     }
 // ------------------------------------------------------------------
 
-    public void open() {
-        stopper.setPosition(1);
+    public void release() {
+        stopper.setPosition(0.5);
     }
 
-    public void close() {
-        stopper.setPosition(0);
+    public void stop() {
+        stopper.setPosition(0.6);
     }
 }
 

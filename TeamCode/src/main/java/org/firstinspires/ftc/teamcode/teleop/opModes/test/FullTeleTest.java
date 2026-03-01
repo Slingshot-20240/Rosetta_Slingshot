@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.teleop.FSM;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
 @Config
-@TeleOp(name="FullTeleTest", group="Testing")
+@TeleOp(name="FullTeleTest", group="test")
 public class FullTeleTest extends OpMode {
 
     private GamepadMapping controls;

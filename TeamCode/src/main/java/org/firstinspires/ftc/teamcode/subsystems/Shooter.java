@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Shooter {
     public final DcMotorEx outtake1;
     public final DcMotorEx outtake2;
+    // hood fully up is 0
+    // hood fully down is 0.65
     public final Servo variableHood;
 
     public Shooter(HardwareMap hardwareMap) {
@@ -28,9 +30,9 @@ public class Shooter {
 
     public enum outtakeVels {
         // 5.059
-        HARDCODED_SHOOT_FRONT(-1120),
+        HARDCODED_SHOOT_FRONT(1120),
         // 5.954
-        HARDCODED_SHOOT_BACK(-1400),
+        HARDCODED_SHOOT_BACK(1400),
         IDLE(0);
 
         private final double outtake_vels;
@@ -120,14 +122,14 @@ public class Shooter {
         variableHood.setPosition(angle);
     }
 
-    // fully down is .6
-    // fully up is .1
+    // fully down is .65
+    // fully up is 0
     public void hoodToBack() {
-        variableHood.setPosition(.175);
+        variableHood.setPosition(.65);
     }
 
     public void hoodToFront() {
-        variableHood.setPosition(.5);
+        variableHood.setPosition(0);
     }
 
     public void shootFromBack() {

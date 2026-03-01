@@ -23,8 +23,8 @@ public class ShooterPID extends OpMode {
     DcMotorEx flywheel1;
     DcMotorEx flywheel2;
     //public static double p1 = 600, i1 = 0.0, d1 = 0.0, f1 = 40;
-    public static double p1 = 700, i1 = 0.0, d1 = 0.0, f1 = 20;
-    public static int targetVel = -1095;
+    public static double p1 = 150, i1 = 0.0, d1 = 0.0, f1 = 20;
+    public static int targetVel = 1095;
     private Telemetry dashboardTelemetry;
     public static double hoodPos = 0.1;
     Robot robot;
@@ -63,17 +63,17 @@ public class ShooterPID extends OpMode {
 
         robot.intake.intakeTransferOn();
 
-        if (controls.transfer.value()) {
-            robot.stopper.close();
-        } else {
-            robot.stopper.open();
-        }
+//        if (controls.transfer.value()) {
+//            robot.stopper.close();
+//        } else {
+//            robot.stopper.open();
+//        }
 
-        if (controls.outtake.locked()) {
-            robot.intake.intakeTransferReverse();
-        } else {
-            robot.intake.intakeTransferOn();
-        }
+//        if (controls.outtake.locked()) {
+//            robot.intake.intakeTransferReverse();
+//        } else {
+//            robot.intake.intakeTransferOn();
+//        }
 
         //sine wave/variable setpoint between 2000 and 5000 ticks/sec
         //double targetVel = 3500 + 1500 * Math.sin(2 * Math.PI * 0.5 * time);
@@ -84,7 +84,7 @@ public class ShooterPID extends OpMode {
         flywheel1.setVelocityPIDFCoefficients(p1, i1, d1, f1);
         flywheel2.setVelocityPIDFCoefficients(p1, i1, d1, f1);
 
-        robot.shooter.variableHood.setPosition(hoodPos);
+        //robot.shooter.variableHood.setPosition(hoodPos);
 
         // Read actual velocity
         double actualVel1 = flywheel1.getVelocity();
