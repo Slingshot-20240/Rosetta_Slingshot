@@ -4,6 +4,9 @@ import com.bylazar.configurables.annotations.Configurable;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.controllable.RunToVelocity;
@@ -19,6 +22,7 @@ public class BaseShooternf implements Subsystem {
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(3.5, 0, 0.002)
+            //old 3.5, 0.002, ff = 0.001
             .basicFF(0.001)
             .build();
 
@@ -26,14 +30,22 @@ public class BaseShooternf implements Subsystem {
     private boolean enabled = false;
 
 
+
     public Command closeSide() {
         return new RunToVelocity(shooterController, -1210).requires(shooter);
+    }
+
+    public Command farSide() {
+        return new RunToVelocity(shooterController, -1450).requires(shooter);
+    }
+
+    public Command idle() {
+        return new RunToVelocity(shooterController, 0).requires(shooter);
     }
 
     public Command setShooterVel(double shooterVel) {
         return new RunToVelocity(shooterController, shooterVel).requires(shooter);
     }
-
 
     public void enable() {
         enabled = true;
@@ -46,8 +58,8 @@ public class BaseShooternf implements Subsystem {
 
     @Override
     public void initialize() {
-        outtake1 = new MotorEx("outtakeL");
-        outtake2 = new MotorEx("outtakeR");
+        outtake1 = new MotorEx("outtakeTop");
+        outtake2 = new MotorEx("outtakeBot");
         outtake2.reverse();
         shooter = new MotorGroup(outtake1, outtake2);
 

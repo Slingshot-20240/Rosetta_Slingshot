@@ -59,7 +59,6 @@ public class Shooternf implements Subsystem {
 
     @Override
     public void initialize() {
-
         disable();
     }
 

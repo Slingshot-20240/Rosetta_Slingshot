@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 
-import com.pedropathing.paths.Path;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Breakbeamnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 import dev.nextftc.core.commands.Command;
@@ -16,8 +17,8 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.SubsystemGroup;
+import dev.nextftc.extensions.pedro.PedroComponent;
 
 //AUTON SEQUENCES CLOSE
 public class s extends SubsystemGroup {
@@ -27,8 +28,8 @@ public class s extends SubsystemGroup {
                 Intakenf.INSTANCE, Stoppernf.INSTANCE,
                 Shooternf.INSTANCE, Hoodnf.INSTANCE
         );
-
     }
+
 
     /**
      * Waits until pathChain is at end
@@ -54,6 +55,15 @@ public class s extends SubsystemGroup {
         );
     }
 
+
+    public Command shootAt(Follower follower, PathChain pathChain, double shootTime, double shootTValue) {
+        return new SequentialGroup(
+                new WaitUntil(() -> follower.getCurrentTValue() >= shootTValue ),
+                shoot(shootTime)
+        );
+    }
+
+
     /**
      * Blocker opens
      * Transfers up for shootTime seconds
@@ -62,9 +72,13 @@ public class s extends SubsystemGroup {
      * @return
      */
     public Command shoot(double shootTime) {
-        return new SequentialGroup(
-                Stoppernf.INSTANCE.open(),
-                new Delay(shootTime)
+        return new ParallelGroup(
+                Lednf.INSTANCE.yellow,
+                new SequentialGroup(
+                        Stoppernf.INSTANCE.open(),
+                        new Delay(shootTime),
+                        Stoppernf.INSTANCE.close()
+                )
         );
     }
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
+package org.firstinspires.ftc.teamcode.NextFTC.misc;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 

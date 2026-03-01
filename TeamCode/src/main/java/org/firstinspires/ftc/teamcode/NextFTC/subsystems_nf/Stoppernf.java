@@ -21,7 +21,7 @@ public class Stoppernf implements Subsystem {
 
     @Override
     public void initialize() {
-        blocker = new ServoEx("blocker");
+        blocker = new ServoEx("stopper");
     }
 
     @Override
