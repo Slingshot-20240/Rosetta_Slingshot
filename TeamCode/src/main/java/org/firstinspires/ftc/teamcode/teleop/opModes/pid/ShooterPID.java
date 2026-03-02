@@ -22,8 +22,8 @@ public class ShooterPID extends OpMode {
 //test
     DcMotorEx flywheel1;
     DcMotorEx flywheel2;
-    //public static double p1 = 600, i1 = 0.0, d1 = 0.0, f1 = 40;
-    public static double p1 = 150, i1 = 0.0, d1 = 0.0, f1 = 20;
+    //public static double p1 = 150, i1 = 0.0, d1 = 0.0, f1 = 20;
+    public static double p1 = 185, i1 = 0.0, d1 = 0.0, f1 = 32;
     public static int targetVel = 1095;
     private Telemetry dashboardTelemetry;
     public static double hoodPos = 0.1;
