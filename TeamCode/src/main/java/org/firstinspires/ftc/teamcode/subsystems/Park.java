@@ -12,6 +12,11 @@ public class Park {
         parkServo2 = hwMap.get(Servo.class, "park2");
     }
 
+    public Park(Servo park1, Servo park2) {
+        parkServo1 = park1;
+        parkServo2 = park2;
+    }
+
     public void tilt() {
         parkServo1.setPosition(0.23);
         parkServo2.setPosition(0.23);

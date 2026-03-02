@@ -20,25 +20,12 @@ public class Intake {
         dropdownIntake = hardwareMap.get(DcMotorEx.class, "dropdownIntake");
         intake1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dropdownIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-//        beamBreakLow = hardwareMap.get(DigitalChannel.class, "bbl");
-//        beamBreakMid = hardwareMap.get(DigitalChannel.class, "bbm");
-//        beamBreakHigh = hardwareMap.get(DigitalChannel.class, "bbh");
-//
-//        beamBreakLow.setMode(DigitalChannel.Mode.INPUT);
-//        beamBreakMid.setMode(DigitalChannel.Mode.INPUT);
-//        beamBreakHigh.setMode(DigitalChannel.Mode.INPUT);
     }
 
     // constructor for JUnit
-    public Intake(DcMotorEx intake1, DcMotorEx intake2,
-                  DigitalChannel bb1, DigitalChannel bb2, DigitalChannel bb3) {
+    public Intake(DcMotorEx intake1, DcMotorEx intake2) {
         this.dropdownIntake = intake2;
         this.intake1 = intake1;
-
-//        beamBreakLow = bb1;
-//        beamBreakMid = bb2;
-//        beamBreakHigh = bb3;
     }
 
 //-------------------------------------------------------------------------------
