@@ -12,7 +12,8 @@ import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 @TeleOp(group = "tests")
 public class StopperTest extends OpMode {
     Robot robot;
-    public static double stopperPos = 0;
+    public static double stopperPos = 0.5;
+    public static double stage2Speed = 0;
     GamepadMapping controls;
 
     @Override
@@ -25,7 +26,9 @@ public class StopperTest extends OpMode {
     public void loop() {
         robot.stopper.stopper.setPosition(stopperPos);
 
-        robot.intake.intakeTransferOn();
+        robot.intake.intake1.setPower(stage2Speed);
+
+        robot.intake.dropdownIntake.setPower(-1);
 
         // 0.55 release
         // 0.6 stop
