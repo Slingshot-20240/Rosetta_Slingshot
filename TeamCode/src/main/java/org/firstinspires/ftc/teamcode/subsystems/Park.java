@@ -4,11 +4,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Park {
-    public Servo parkServo1, parkServo2;
+    public Servo parkServo1;
+    public Servo parkServo2;
 
     public Park(HardwareMap hwMap) {
-        parkServo1 = hwMap.get(Servo.class, "p1");
-        parkServo2 = hwMap.get(Servo.class, "p2");
+        parkServo1 = hwMap.get(Servo.class, "park1");
+        parkServo2 = hwMap.get(Servo.class, "park2");
+    }
+
+    public Park(Servo park1, Servo park2) {
+        parkServo1 = park1;
+        parkServo2 = park2;
     }
 
     public void tilt() {
@@ -16,7 +22,7 @@ public class Park {
         parkServo2.setPosition(0.23);
     }
 
-    public void untilt() {
+    public void unTilt() {
         parkServo1.setPosition(0.5);
         parkServo2.setPosition(0.5);
     }

@@ -57,12 +57,19 @@ public class FSM {
                     state = FSMStates.PARK;
                 }
 
+                // Intake always on
+                if (gamepad.intake.locked()) {
+                    intake.intakeTransferOn();
+                } else if (!gamepad.transfer.value()) {
+                    intake.intakeTransferOff();
+                }
+
                 // Stopper toggle
                 if (gamepad.transfer.value() && type == ControlType.PID_CONTROL) {
                     intake.intakeTransferOn();
-                    stopper.close();
+                    stopper.release();
                 } else {
-                    stopper.open();
+                    stopper.stop();
                 }
 
                 // Outtake hold
@@ -70,12 +77,6 @@ public class FSM {
                     state = FSMStates.OUTTAKING;
                 }
 
-                // Intake hold
-                if (gamepad.intake.locked()) {
-                    intake.intakeTransferOn();
-                } else {
-                    intake.intakeTransferOff();
-                }
 
                 // --------------- PID Only ---------------
 
@@ -100,7 +101,7 @@ public class FSM {
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
                     if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
-                        robot.shooter.setShooterVelocity(-lastVelo);
+                        robot.shooter.setShooterVelocity(lastVelo);
                     } else {
                         // get position will get last passed position so uh hopefully that should work
                         if (Robot.cam.getTargetArtifactTravelDistanceX() > FAR_THRESHOLD && robot.shooter.variableHood.getPosition() < MAX_HOOD_POS - HOOD_OFFSET) {
@@ -108,7 +109,7 @@ public class FSM {
                         } else {
                             robot.shooter.setHoodAngle(targetHoodPos);
                         }
-                        robot.shooter.setShooterVelocity(-targetVelocity); // TODO maybe add offset
+                        robot.shooter.setShooterVelocity(targetVelocity); // TODO maybe add offset
                     }
 
                     // set LED states
@@ -127,11 +128,12 @@ public class FSM {
                     if (savedType == ControlType.PID_CONTROL) {
                         type = ControlType.HARDCODED_CONTROL;
                         savedType = ControlType.HARDCODED_CONTROL;
-
+                        gamepad.switchMode.set(false);
                     // if saved is Hardcoded (in Hardcoded mode), switch to PID
                     } else if (savedType == ControlType.HARDCODED_CONTROL) {
                         type = ControlType.PID_CONTROL;
                         savedType = ControlType.PID_CONTROL;
+                        gamepad.switchMode.set(false);
                     }
                 }
 
@@ -162,7 +164,7 @@ public class FSM {
             case PID_SHOOT:
 
                 intake.intakeTransferOn();
-                stopper.close();
+                stopper.release();
 
                 if (!gamepad.transfer.locked()) {
                     state = FSMStates.BASE_STATE;
@@ -175,7 +177,7 @@ public class FSM {
                 park.tilt();
                 if (!gamepad.park.value()) {
                     state = FSMStates.BASE_STATE;
-                    park.untilt();
+                    park.unTilt();
                 }
 
                 break;
@@ -188,7 +190,7 @@ public class FSM {
                 shooter.hoodToBack();
                 intake.intakeTransferOn();
 
-                stopper.close();
+                stopper.stop();
 
                 if (!gamepad.shootBack.locked()) {
                     state = FSMStates.BASE_STATE;
@@ -203,7 +205,7 @@ public class FSM {
                 shooter.shootFromFront();
                 shooter.hoodToFront();
 
-                stopper.close();
+                stopper.stop();
 
                 if (!gamepad.shootFront.locked()) {
                     state = FSMStates.BASE_STATE;

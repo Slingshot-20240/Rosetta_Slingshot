@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.teleop.FSM;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 
-@TeleOp(name="FSMTest", group="Testing")
+@TeleOp(name="FSMTest", group="test")
 public class FSMTest extends OpMode {
     // Standard Robot Classes
     private Robot robot;
@@ -46,6 +46,9 @@ public class FSMTest extends OpMode {
         double rotate = -gamepad1.right_stick_x * 0.55;
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
+
+        telemetry.addData("Control Type", fsm.getControlType());
+        telemetry.addData("Switch value", controls.switchMode.value());
     }
 
     @Override
