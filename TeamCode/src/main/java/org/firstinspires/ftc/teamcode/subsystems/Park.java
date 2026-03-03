@@ -18,13 +18,13 @@ public class Park {
     }
 
     public void tilt() {
-        parkServo1.setPosition(0.23);
-        parkServo2.setPosition(0.23);
+        parkServo1.setPosition(0.2);
+        parkServo2.setPosition(0.2);
     }
 
     public void unTilt() {
-        parkServo1.setPosition(0.5);
-        parkServo2.setPosition(0.5);
+        parkServo1.setPosition(0.52);
+        parkServo2.setPosition(0.52);
     }
 
 }
