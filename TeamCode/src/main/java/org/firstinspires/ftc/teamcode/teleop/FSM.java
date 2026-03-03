@@ -57,15 +57,15 @@ public class FSM {
                     state = FSMStates.PARK;
                 }
 
-                // Intake always on
-                if (gamepad.intake.locked()) {
+                // Intake toggle
+                if (gamepad.intake.value()) {
                     intake.intakeTransferOn();
-                } else if (!gamepad.transfer.value()) {
+                } else if (!gamepad.transfer.locked()) {
                     intake.intakeTransferOff();
                 }
 
-                // Stopper toggle
-                if (gamepad.transfer.value() && type == ControlType.PID_CONTROL) {
+                // Stopper hold
+                if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
                     intake.intakeTransferOn();
                     stopper.release();
                 } else {
