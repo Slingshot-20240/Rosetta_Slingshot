@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
+import org.firstinspires.ftc.teamcode.misc.PIDFControllerEx;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -33,6 +35,13 @@ public class NikethTele extends OpMode {
 
     public static double kP = 0.05;
 
+    // Bee tuning
+    private double targetAngle = 0;
+    public static double turnP = 0.013;
+    public static double turnI = 0;
+    public static double turnD = 0.0001;
+    public static double turnF = 0;
+    private PIDFControllerEx turnController = new PIDFControllerEx(turnP, turnI, turnD, turnF);
 
     @Override
     public void init() {
@@ -132,29 +141,24 @@ public class NikethTele extends OpMode {
             rotate = Math.signum(rotate) * minPower;
         }
         else {
-        rotate = -gamepad1.right_stick_x * 0.55;
+            rotate = -gamepad1.right_stick_x * 0.55;
         }
 
+        // bee rotate logic
 
-
-    //Tank-Mecanum Override
+        //Tank-Mecanum Override
         if (gamepad1.left_stick_button) {
             follower.setTeleOpDrive(forward, strafe, rotate, true);
         } else {
             follower.setTeleOpDrive(forward, 0, rotate, true);
         }
 
-
-
-    //Rumble Settings
+        //Rumble Settings
         if (Math.abs(visionHeadingError) < 1) {
             gamepad1.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
         } else {
             gamepad1.stopRumble();
         }
-
-
-
 
         // Telemetry
         telemetry.addData("Pose", pose.toString());
@@ -165,9 +169,18 @@ public class NikethTele extends OpMode {
     public void stop() {
         PoseStorage.startingPose = follower.getPose();
     }
+
     private double angleWrap(double angle) {
         while (angle > Math.PI) angle -= 2 * Math.PI;
         while (angle < -Math.PI) angle += 2 * Math.PI;
         return angle;
+    }
+
+    public double lockHeading(double targetAngle, double currentHeading) {
+        double wrappedTarget = angleWrap(targetAngle);
+        double error = angleWrap(targetAngle - currentHeading);
+        double pid = turnController.calculate(error, false);
+        double power = pid + turnF;
+        return -power;
     }
 }
