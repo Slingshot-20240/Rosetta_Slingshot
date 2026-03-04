@@ -24,6 +24,13 @@ public class NikethTele extends OpMode {
     private Follower follower;
     private TelemetryManager telemetryM;
 
+    public static double tolerance = 0.01;
+
+    // Vision tuning
+    public static double visionTurn_kP = 0.04;
+    public static double visionMinTurnPower = 0.1;
+    public static double visionMiniTolerance = 0.01;
+
     public static double kP = 0.05;
 
 
@@ -58,8 +65,8 @@ public class NikethTele extends OpMode {
         telemetryM.update();
         telemetry.update();
 
-        double visionBearing = Math.toRadians(Robot.cam.getATangle());
-        double visionError = Math.abs(visionBearing);
+//        double visionBearing = Math.toRadians(Robot.cam.getATangle());
+//        double visionError = Math.abs(visionBearing);
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
 
@@ -89,13 +96,46 @@ public class NikethTele extends OpMode {
 //        }
 
 
-    //Auto Align
-        if (gamepad1.right_trigger >= 0.4) {
-            rotate = visionBearing * kP;
-        } else {
-            rotate = -Math.pow(gamepad1.right_stick_x, 5);
+//    //Auto Align
+//        if (gamepad1.a) {
+//            rotate = visionBearing * kP;
+//        } else {
+//            rotate = -Math.pow(gamepad1.right_stick_x, 5);
+//        }
+//        rotate = Math.max(-1.0, Math.min(1.0, rotate));
+
+        //------------- error calculation -------------\\
+        // Vision error
+        double visionBearing = Math.toRadians(Robot.cam.getATangle());
+        double visionHeadingError = angleWrap(visionBearing);
+        boolean visionTurnFinished =
+                Math.abs(visionHeadingError) < tolerance;
+        //------------- rotate logic -------------\\
+
+        forward = 0;
+        strafe = 0;
+
+        double error;
+        double kP;
+        double minPower;
+        double miniTolerance;
+
+        error = visionHeadingError;
+        kP = visionTurn_kP;
+        minPower = visionMinTurnPower;
+        miniTolerance = visionMiniTolerance;
+
+
+        rotate = error * kP;
+
+        if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
+            rotate = Math.signum(rotate) * minPower;
         }
-        rotate = Math.max(-1.0, Math.min(1.0, rotate));
+        else {
+        rotate = -gamepad1.right_stick_x * 0.55;
+        }
+
+
 
     //Tank-Mecanum Override
         if (gamepad1.left_stick_button) {
@@ -104,8 +144,10 @@ public class NikethTele extends OpMode {
             follower.setTeleOpDrive(forward, 0, rotate, true);
         }
 
+
+
     //Rumble Settings
-        if (Math.abs(visionError) < 1) {
+        if (Math.abs(visionHeadingError) < 1) {
             gamepad1.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
         } else {
             gamepad1.stopRumble();

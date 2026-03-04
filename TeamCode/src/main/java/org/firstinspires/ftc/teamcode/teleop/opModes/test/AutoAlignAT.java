@@ -48,22 +48,6 @@ public class AutoAlignAT extends OpMode {
     public void loop() {
         follower.update();
         telemetry.update();
-
-        //AUTO HOOD
-        double distance = Robot.cam.getATdist();
-        double targetHoodPos;
-        //TODO - TUNE THIS OFFSET VALUE
-        if (Robot.cam.getATdist() < 54) {
-            targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.2;
-        } else {
-            targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
-        }
-        if (Robot.cam.getATdist() == 22) {
-            robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
-        } else {
-            robot.shooter.setHoodAngle(targetHoodPos);
-        }
-
         //LED
         if (Robot.cam.getATdist() != 0) {
             robot.ledBoard0.setState(true);

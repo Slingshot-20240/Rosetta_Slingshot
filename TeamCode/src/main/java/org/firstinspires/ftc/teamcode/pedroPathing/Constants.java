@@ -16,31 +16,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10.9) //me -98.6, w bot, 122.4
-            .forwardZeroPowerAcceleration(-41)
+            .mass(13.5)
+            .forwardZeroPowerAcceleration(-34.31)
             .lateralZeroPowerAcceleration(-67.6)
 
 // TRANSLATIONAL
-            .useSecondaryTranslationalPIDF(true)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.296, 0, 0.032, 0))
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.012,0))
+//            .useSecondaryTranslationalPIDF(true)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.094, 0, 0.032, 0.008))
+//            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.012,0))
 
 // HEADING
-            .headingPIDFCoefficients(new PIDFCoefficients(2.8, 0, 0.17, 0))
+            .headingPIDFCoefficients(new PIDFCoefficients(1.95, 0, 0.15, 0))
 //            .useSecondaryHeadingPIDF(true)
 //            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.17,0,0.006,0))
 
 
 //DRIVE
             //TODO - P USED TO BE 0.87
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8,0.0,0.06,0.7,0.0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8,0.0,0.06,0.6,0.0))
 //            .useSecondaryDrivePIDF(true)
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))
             ;
 
 
-    //t value 0.993
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 50, 1.5, 2.5);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 50, 1.5, 1.5);
 //    public static PathConstraints pathConstraints = new PathConstraints(0.995, 40, 1.55, 1.6);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -53,8 +52,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(86) // real tuned val was 80 // second value was 80
-            .yVelocity(70) //real tuned val was 65 //second value was 68
+            .xVelocity(80) //tuned was 76
+            .yVelocity(62) //tuned was 58
             .useVoltageCompensation(true)
             .nominalVoltage(12.9);
 

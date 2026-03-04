@@ -18,8 +18,8 @@ public class Shooternf implements Subsystem {
 
     private final MotorEx outtake1 = new MotorEx("outtakeL").reversed();
     private final MotorEx outtake2 = new MotorEx("outtakeR");
-    private final Controllable outtakeL = new VoltageCompensatingMotor(outtake1, 0.01, 13);
-    private final Controllable outtakeR = new VoltageCompensatingMotor(outtake2, 0.01, 13);
+    private final VoltageCompensatingMotor outtakeL = new VoltageCompensatingMotor(outtake1, 0.01, 13);
+    private final VoltageCompensatingMotor outtakeR = new VoltageCompensatingMotor(outtake2, 0.01, 13);
     public MotorGroup shooter = new MotorGroup(outtakeL, outtakeR);
 ;
 
