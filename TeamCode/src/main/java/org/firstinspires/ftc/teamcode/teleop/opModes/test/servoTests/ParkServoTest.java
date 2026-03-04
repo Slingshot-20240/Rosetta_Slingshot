@@ -13,7 +13,7 @@ public class ParkServoTest extends OpMode {
 
     Park park;
 
-    public static double position = 0.5;
+    public static double position = 0.52;
 
     @Override
     public void init() {
@@ -23,6 +23,7 @@ public class ParkServoTest extends OpMode {
     @Override
     public void loop() {
         park.parkServo1.setPosition(position);
+        park.parkServo2.setPosition(position);
     }
 
 

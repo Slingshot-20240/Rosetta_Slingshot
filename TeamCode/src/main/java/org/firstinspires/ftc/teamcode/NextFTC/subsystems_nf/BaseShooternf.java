@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
-import com.bylazar.configurables.annotations.Configurable;
+
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
@@ -8,11 +10,7 @@ import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
-import dev.nextftc.hardware.controllable.MotorGroup;
-import dev.nextftc.hardware.controllable.RunToVelocity;
-import dev.nextftc.hardware.impl.MotorEx;
 
-@Configurable
 public class BaseShooternf implements Subsystem {
     public static final BaseShooternf INSTANCE = new BaseShooternf();
     private BaseShooternf() { }
