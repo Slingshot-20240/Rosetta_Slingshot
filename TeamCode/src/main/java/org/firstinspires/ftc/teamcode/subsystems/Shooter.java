@@ -71,9 +71,9 @@ public class Shooter {
 
     // converts the target velocity from meters per second to rpm for DcMotor
     public static double convertMPSToRPM(double mpsVel) {
-        double c = -2.28611;
-        double a = 12.79622;
-        double b = 0.000790302;
+        double c = -0.947834;
+        double a = 12.70476;
+        double b = 0.000686427;
         double lnArgument = Math.abs(1.0 - ((mpsVel - c) / a));
         return -Math.log(lnArgument) / b; // Math.log is natural logarithm
     }
@@ -101,8 +101,8 @@ public class Shooter {
 
     // converts the target angle from calculateHoodAngle() to a servo position from 0-1
     public static double convertTargetAngleToHoodPos(double targetAngle) {
-        double m = 42.8718;
-        double b = 37.09643;
+        double m = 59.72666;
+        double b = 24.98837;
         return (Math.toDegrees(targetAngle) - b) / m;
     }
 
