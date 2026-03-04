@@ -8,30 +8,38 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
-import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.*;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.*;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.s;
+
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.BaseShooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
 
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 
-import dev.nextftc.core.components.SubsystemComponent;
 
+import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Disabled
 @Config
 @Autonomous(name = "zSimple Auton Test")
 public class SimpleAutonTest extends NextFTCOpMode {
@@ -39,8 +47,11 @@ public class SimpleAutonTest extends NextFTCOpMode {
         addComponents(
                 new SubsystemComponent(
                         f.i, s.i,
-                        Intakenf.INSTANCE, Stoppernf.INSTANCE,
-                        Shooternf.INSTANCE, Lednf.INSTANCE
+                        Intakenf.INSTANCE,
+                        Stoppernf.INSTANCE,
+                        Hoodnf.INSTANCE,
+                        BaseShooternf.INSTANCE
+//                        Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
@@ -57,7 +68,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     public void buildPaths() {
 
-        follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+        PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
 
         scorePreloads_grabSet2 = PedroComponent.follower().pathBuilder()
                 .addPath(
@@ -67,7 +78,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
                                 // position. This means lower shooter speed and make hood lower for more arc
                                 new Pose(55.400, 76.100),
                                 new Pose(103.389, 85.000),
-                                new Pose(127.000, 83.000)
+                                new Pose(126, 83.000)
                         )
                 )
                 .setHeadingInterpolation(
@@ -85,17 +96,18 @@ public class SimpleAutonTest extends NextFTCOpMode {
                                         new HeadingInterpolator.PiecewiseNode(
                                                 0.45,
                                                 1.0,
-                                                HeadingInterpolator.linearFromPoint(
-                                                        //TODO - whatever current pose is, not 45 degrees hardcoded
-                                                        () -> follower().getHeading(),
-                                                        Math.toRadians(0),
-                                                        0.995
-                                                )
+                                        HeadingInterpolator.constant(0)
+//                                                HeadingInterpolator.linearFromPoint(
+//                                                        //TODO - whatever current pose is, not 45 degrees hardcoded
+//                                                        () -> follower().getHeading(),
+//                                                        Math.toRadians(0),
+//                                                        0.995
+//                                                )
                                         )
                                 )
                 )
-                .addParametricCallback(0.35, () -> follower().setMaxPower(0.35))
-                .addParametricCallback(0.45, () -> follower().setMaxPower(1.0))
+                .addParametricCallback(0.25, () -> follower().setMaxPower(0.35))
+                .addParametricCallback(0.55, () -> follower().setMaxPower(1.0))
 
                 .build();
 
@@ -104,7 +116,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
         scoreSet2 = follower().pathBuilder()
                 //Score Set 2
                 .addPath(
-                        new BezierLine(new Pose(127, 83), scorePose)
+                        new BezierLine(new Pose(126, 83), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
                 //was 0
@@ -117,7 +129,8 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.3)
+                Hoodnf.INSTANCE.setHoodPos(0.3),
+                Stoppernf.INSTANCE.close()
         );
 
     }
@@ -127,17 +140,23 @@ public class SimpleAutonTest extends NextFTCOpMode {
         return new SequentialGroup(
 
                 new ParallelDeadlineGroup(
-                        f.i.follow(scorePreloads_grabSet2, "green"),
+                        new FollowPath(scorePreloads_grabSet2),
 
-                        Shooternf.INSTANCE.setShooterVel(-1190),
-                        s.i.shootAt(follower(), scorePreloads_grabSet2, 2, 0.35)
+                        Intakenf.INSTANCE.in(),
+                        s.i.shooterState(1000,0.3),
+                        new SequentialGroup(
+                                new WaitUntil(() -> PedroComponent.follower().getCurrentTValue() >= 0.35),
+                                Stoppernf.INSTANCE.open(),
+                                new Delay(1),
+                                Stoppernf.INSTANCE.close()
+                        )
                 ),
-
+//
                 new ParallelDeadlineGroup(
-                        s.i.shootSequence(scoreSet2,2),
+                        new FollowPath(scoreSet2),
 
-                        s.i.shooterState(-1210,0.33),
-                        f.i.follow(scoreSet2,"green")
+                        s.i.shootSequence(scoreSet2,2)
+
                 )
 
 
@@ -151,12 +170,12 @@ public class SimpleAutonTest extends NextFTCOpMode {
     public void onInit() {
         buildPaths();
         init_bot().schedule();
-        Shooternf.INSTANCE.disable();
+        BaseShooternf.INSTANCE.disable();
     }
 
     @Override
     public void onStartButtonPressed() {
-        Shooternf.INSTANCE.enable();
+        BaseShooternf.INSTANCE.enable();
         autonomous().schedule();
     }
 
@@ -167,7 +186,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     @Override
     public void onStop() {
-        PoseStorage.startingPose = follower().getPose();
+        PoseStorage.startingPose = PedroComponent.follower().getPose();
     }
 
 

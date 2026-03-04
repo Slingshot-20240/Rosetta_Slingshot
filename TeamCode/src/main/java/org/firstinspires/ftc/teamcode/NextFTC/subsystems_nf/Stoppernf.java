@@ -4,24 +4,26 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.ServoEx;
+import dev.nextftc.hardware.positionable.SetPosition;
 
 public class Stoppernf implements Subsystem {
     public static final Stoppernf INSTANCE = new Stoppernf();
     private Stoppernf() {}
 
-    public ServoEx blocker;
+    public ServoEx stopper;
 
 
     public Command close() {
-        return new InstantCommand(() -> blocker.getServo().setPosition(0.2));
+        return new SetPosition(stopper,0.6).requires(this);
     }
     public Command open() {
-        return new InstantCommand(() -> blocker.getServo().setPosition(0.4));
+        return new SetPosition(stopper,0.48).requires(this);
     }
+
 
     @Override
     public void initialize() {
-        blocker = new ServoEx("stopper");
+        stopper = new ServoEx("stopper");
     }
 
     @Override

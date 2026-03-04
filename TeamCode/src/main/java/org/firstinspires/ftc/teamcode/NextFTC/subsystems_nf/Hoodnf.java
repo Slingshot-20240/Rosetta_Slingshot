@@ -23,7 +23,7 @@ public class Hoodnf implements Subsystem {
     }
 
     public Command setHoodPos(double hoodPosition) {
-        return new InstantCommand(() -> variableHood.getServo().setPosition(hoodPosition)).requires(this);
+        return new SetPosition(variableHood, hoodPosition).requires(this);
     }
 
 }

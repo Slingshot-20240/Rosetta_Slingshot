@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.s;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+//import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -42,8 +42,8 @@ public class RedHpCycleFar extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, s.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Stoppernf.INSTANCE,
-                        Lednf.INSTANCE
+                        Shooternf.INSTANCE, Stoppernf.INSTANCE
+//                        Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE

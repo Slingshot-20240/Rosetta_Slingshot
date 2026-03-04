@@ -24,7 +24,7 @@ public class Robot {
     // motor outtakeBot      control hub 3
 
     // motor intake1         expansion hub port _
-    // motor intake2         expansion hub port _
+    // motor dropDownIntake         expansion hub port _
 
     // led                   control hub 6-7
 

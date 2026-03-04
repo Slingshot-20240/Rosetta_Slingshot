@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+//import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.misc.vision.Logi;
 
 import dev.nextftc.core.commands.Command;
@@ -19,7 +19,7 @@ public class f extends SubsystemGroup {
 
     private f() {
         super(
-                Lednf.INSTANCE
+//                Lednf.INSTANCE
         );
     }
 
@@ -30,20 +30,20 @@ public class f extends SubsystemGroup {
     }
     public final Command follow(PathChain path, String color) {
         return new ParallelGroup(
-                new FollowPath(path),
-                Lednf.INSTANCE.color(color)
+                new FollowPath(path)
+//                Lednf.INSTANCE.color(color)
         );
     }
     public final Command follow(PathChain path, String color, boolean holdEnd) {
         return new ParallelGroup(
-                new FollowPath(path, holdEnd),
-                Lednf.INSTANCE.color(color)
+                new FollowPath(path, holdEnd)
+//                Lednf.INSTANCE.color(color)
         );
     }
     public final Command follow(PathChain path, String color, boolean holdEnd, double maxPower) {
         return new ParallelGroup(
-                new FollowPath(path, holdEnd, maxPower),
-                Lednf.INSTANCE.color(color)
+                new FollowPath(path, holdEnd, maxPower)
+//                Lednf.INSTANCE.color(color)
         );
     }
     public final Command follow(PathChain path, boolean holdEnd) {

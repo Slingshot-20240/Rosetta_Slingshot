@@ -4,9 +4,9 @@ package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.BaseShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -26,7 +26,7 @@ public class s extends SubsystemGroup {
     private s() {
         super(
                 Intakenf.INSTANCE, Stoppernf.INSTANCE,
-                Shooternf.INSTANCE, Hoodnf.INSTANCE
+                BaseShooternf.INSTANCE, Hoodnf.INSTANCE
         );
     }
 
@@ -73,7 +73,7 @@ public class s extends SubsystemGroup {
      */
     public Command shoot(double shootTime) {
         return new ParallelGroup(
-                Lednf.INSTANCE.yellow,
+//                Lednf.INSTANCE.yellow,
                 new SequentialGroup(
                         Stoppernf.INSTANCE.open(),
                         new Delay(shootTime),
@@ -92,7 +92,7 @@ public class s extends SubsystemGroup {
     public Command shoot(double shootTime, double transferSpeed) {
         return new ParallelGroup(
 
-                Lednf.INSTANCE.yellow,
+//                Lednf.INSTANCE.yellow,
                 new SequentialGroup(
                         Intakenf.INSTANCE.setIntakePower(transferSpeed),
 
@@ -116,7 +116,7 @@ public class s extends SubsystemGroup {
      */
     public Command shooterState(double velocity) {
         return new ParallelGroup(
-                Shooternf.INSTANCE.setShooterVel(velocity),
+                BaseShooternf.INSTANCE.setShooterVel(velocity),
                 Hoodnf.INSTANCE.setHoodPos(0.3)
         );
     }
@@ -130,7 +130,7 @@ public class s extends SubsystemGroup {
      */
     public Command shooterState(double velocity, double hoodPos) {
         return new ParallelGroup(
-                Shooternf.INSTANCE.setShooterVel(velocity),
+                BaseShooternf.INSTANCE.setShooterVel(velocity),
                 Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }

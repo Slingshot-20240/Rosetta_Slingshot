@@ -26,14 +26,14 @@ public class Constants {
 //            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.012,0))
 
 // HEADING
-            .headingPIDFCoefficients(new PIDFCoefficients(1.95, 0, 0.15, 0))
+            .headingPIDFCoefficients(new PIDFCoefficients(2.0, 0, 0.15, 0))
 //            .useSecondaryHeadingPIDF(true)
 //            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.17,0,0.006,0))
 
 
 //DRIVE
             //TODO - P USED TO BE 0.87
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8,0.0,0.06,0.6,0.0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.78,0.0,0.06,0.6,0.0))
 //            .useSecondaryDrivePIDF(true)
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))
             ;
