@@ -82,6 +82,31 @@ public class s extends SubsystemGroup {
         );
     }
 
+    /**
+     * Blocker opens
+     * Transfers up for shootTime seconds
+     * Blocker closes
+     * @param shootTime
+     * @return
+     */
+    public Command shoot(double shootTime, double transferSpeed) {
+        return new ParallelGroup(
+
+                Lednf.INSTANCE.yellow,
+                new SequentialGroup(
+                        Intakenf.INSTANCE.setIntakePower(transferSpeed),
+
+                        Stoppernf.INSTANCE.open(),
+                        new Delay(shootTime),
+
+                        new ParallelGroup(
+                                Stoppernf.INSTANCE.close(),
+                                Intakenf.INSTANCE.in()
+                        )
+                )
+        );
+    }
+
 
     /**
      * Sets shooter speed

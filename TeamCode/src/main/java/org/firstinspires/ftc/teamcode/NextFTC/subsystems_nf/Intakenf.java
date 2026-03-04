@@ -41,7 +41,7 @@ public class Intakenf implements Subsystem {
     public void initialize() {
         intake1 = new MotorEx("intake1");
         intake2 = new MotorEx("intake2");
-        intake1.reverse();
+//        intake1.reverse();
         intake = new MotorGroup(intake1, intake2);
     }
 

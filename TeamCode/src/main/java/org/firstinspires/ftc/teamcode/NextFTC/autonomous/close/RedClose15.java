@@ -33,7 +33,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 
 @Config
-@Autonomous(name = "Red 12 Close")
+@Autonomous(name = "Red 15 Close")
 public class RedClose15 extends NextFTCOpMode {
     public RedClose15() {
         addComponents(
@@ -248,7 +248,8 @@ public class RedClose15 extends NextFTCOpMode {
 
     private Command init_bot() {
         return new SequentialGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.37)
+                Hoodnf.INSTANCE.setHoodPos(0.37),
+                Stoppernf.INSTANCE.close()
         );
 
     }

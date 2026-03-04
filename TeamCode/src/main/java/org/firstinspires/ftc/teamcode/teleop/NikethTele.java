@@ -30,7 +30,7 @@ public class NikethTele extends OpMode {
 
     // Vision tuning
     public static double visionTurn_kP = 0.04;
-    public static double visionMinTurnPower = 0.1;
+    public static double visionMinTurnPower = 0.07;
     public static double visionMiniTolerance = 0.01;
 
     public static double kP = 0.05;
@@ -89,7 +89,7 @@ public class NikethTele extends OpMode {
     //Drive Controls ----------------------------------------------------------------
         double forward = -Math.pow(gamepad1.left_stick_y, 5);
         double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
-        double rotate;
+        double rotate = 0;
 
 //        //TODO - try holding and also pressing
 //        if (gamepad1.aWasPressed()) {
@@ -106,7 +106,7 @@ public class NikethTele extends OpMode {
 
 
 //    //Auto Align
-//        if (gamepad1.a) {
+//        if (gamepad1.right_trigger > 0.1) {
 //            rotate = visionBearing * kP;
 //        } else {
 //            rotate = -Math.pow(gamepad1.right_stick_x, 5);
@@ -121,9 +121,6 @@ public class NikethTele extends OpMode {
                 Math.abs(visionHeadingError) < tolerance;
         //------------- rotate logic -------------\\
 
-        forward = 0;
-        strafe = 0;
-
         double error;
         double kP;
         double minPower;
@@ -134,31 +131,34 @@ public class NikethTele extends OpMode {
         minPower = visionMinTurnPower;
         miniTolerance = visionMiniTolerance;
 
+        if (gamepad1.a) {
+            forward = 0;
+            strafe = 0;
 
-        rotate = error * kP;
+            rotate = error * kP;
 
-        if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
-            rotate = Math.signum(rotate) * minPower;
-        }
-        else {
+            if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
+                rotate = Math.signum(rotate) * minPower;
+            }
+        } else {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
         // bee rotate logic
 
         //Tank-Mecanum Override
-        if (gamepad1.left_stick_button) {
+        if (gamepad1.left_trigger > 0.1) {
             follower.setTeleOpDrive(forward, strafe, rotate, true);
         } else {
             follower.setTeleOpDrive(forward, 0, rotate, true);
         }
 
-        //Rumble Settings
-        if (Math.abs(visionHeadingError) < 1) {
-            gamepad1.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
-        } else {
-            gamepad1.stopRumble();
-        }
+//        //Rumble Settings
+//        if (Math.abs(visionHeadingError) < 1) {
+//            gamepad1.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
+//        } else {
+//            gamepad1.stopRumble();
+//        }
 
         // Telemetry
         telemetry.addData("Pose", pose.toString());

@@ -53,15 +53,17 @@ public class GamepadMapping {
 
     public void update() {
         joystickUpdate();
+
+        //Auto align - Right Trigger
+        //Mecanum override - Left Trigger
         // INTAKE
-        //TODO - make toggle
         intake.update(gamepad1.left_bumper);
 
         // TRANSFER
         transfer.update(gamepad1.right_bumper);
 
         // OUTTAKE
-        outtake.update(gamepad1.left_trigger >= 0.3);
+        outtake.update(gamepad1.b);
 
         // MISC
         switchMode.update(gamepad1.dpad_down);
