@@ -50,7 +50,6 @@ public class NikethTele extends OpMode {
     public static double turnF = 0;
     private PIDFControllerEx turnController = new PIDFControllerEx(turnP, turnI, turnD, turnF);
 
-
     @Override
     public void init() {
 
@@ -121,49 +120,48 @@ public class NikethTele extends OpMode {
 
         //------------- error calculation -------------\\
         // Vision error
-        double visionBearing = Math.toRadians(Robot.cam.getATangle());
-        double visionHeadingError = angleWrap(visionBearing);
-        boolean visionTurnFinished =
-                Math.abs(visionHeadingError) < tolerance;
+//        double visionBearing = Math.toRadians(Robot.cam.getATangle());
+//        double visionHeadingError = angleWrap(visionBearing);
+//        boolean visionTurnFinished =
+//                Math.abs(visionHeadingError) < tolerance;
 
         //        //TODO - try holding and also pressing
 
         //------------- rotate logic -------------\\
 
-        double error;
-        double kP;
-        double minPower;
-        double miniTolerance;
-
-        error = visionHeadingError;
-        kP = visionTurn_kP;
-        minPower = visionMinTurnPower;
-        miniTolerance = visionMiniTolerance;
-
-        if (gamepad1.a) {
-            forward = 0;
-            strafe = 0;
-
-            rotate = error * kP;
-
-            if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
-                rotate = Math.signum(rotate) * minPower;
-            }
-        } else {
-            rotate = -gamepad1.right_stick_x * 0.55;
-        }
+//        double error;
+//        double kP;
+//        double minPower;
+//        double miniTolerance;
+//
+//        error = visionHeadingError;
+//        kP = visionTurn_kP;
+//        minPower = visionMinTurnPower;
+//        miniTolerance = visionMiniTolerance;
+//
+//        if (gamepad1.a) {
+//            forward = 0;
+//            strafe = 0;
+//
+//            rotate = error * kP;
+//
+//            if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
+//                rotate = Math.signum(rotate) * minPower;
+//            }
+//        } else {
+//            rotate = -gamepad1.right_stick_x * 0.55;
+//        }
 
         // bee rotate logic
 
         //Tank-Mecanum Override
         if (gamepad1.y) {
-
+            double visionHeading = Robot.cam.getATangle();
+            rotate = lockHeading(visionHeading);
+            follower.setTeleOpDrive(forward, strafe, rotate, true);
         } else {
-            if (gamepad1.left_trigger > 0.1) {
-                follower.setTeleOpDrive(forward, strafe, rotate, true);
-            } else {
-                follower.setTeleOpDrive(forward, 0, rotate, true);
-            }
+            rotate = -gamepad1.right_stick_x * 0.55;
+            follower.setTeleOpDrive(forward, strafe, rotate, true);
         }
 
 //        //Rumble Settings
@@ -190,12 +188,10 @@ public class NikethTele extends OpMode {
         return angle;
     }
 
-    public double lockHeading(double targetAngle, double currentHeading) {
+    public double lockHeading(double targetAngle) {
         double wrappedTarget = angleWrap(targetAngle);
-        double error = angleWrap(targetAngle - currentHeading);
-        double pid = turnController.calculate(error, false);
-        double power = pid + turnF;
-        return -power;
+        double pid = turnController.calculate(wrappedTarget, false);
+        return pid + turnF;
     }
 
 
