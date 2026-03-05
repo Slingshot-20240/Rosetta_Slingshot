@@ -14,7 +14,7 @@ public class Stoppernf implements Subsystem {
 
 
     public Command close() {
-        return new SetPosition(stopper,0.6).requires(this);
+        return new SetPosition(stopper,0.7).requires(this);
     }
     public Command open() {
         return new SetPosition(stopper,0.48).requires(this);

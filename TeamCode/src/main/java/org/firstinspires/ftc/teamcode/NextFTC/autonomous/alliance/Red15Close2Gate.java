@@ -25,6 +25,7 @@ import org.opencv.core.Mat;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -64,7 +65,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
         public PathChain scoreHp;
 
         public Pose scorePose = new Pose(92,88);
-        public double scoreHeading = 49;
+        public double scoreHeading = 45;
 
         public void buildPaths() {
             follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -75,25 +76,28 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new BezierLine(new Pose(126.2, 119), scorePose)
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43))
+//                .setTangentHeadingInterpolation().setReversed()
                     .build();
 
 
 
-            grabSet2 = PedroComponent.follower().pathBuilder().addPath(
-                            new BezierLine(
+            grabSet2 = PedroComponent.follower()
+                    .pathBuilder()
+                    .addPath(
+                            new BezierCurve(
                                     scorePose,
-
-                                    new Pose(127, 84.000)
+                                    new Pose(92.292, 77),
+                                    new Pose(126.5, 82.9)
                             )
-                    ).setTangentHeadingInterpolation()
-
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
                     .build();
 
             gateSet2 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(127, 84.000),
+                                    new Pose(126.5, 82.9),
                                     new Pose(110.481, 71.074),
-                                    new Pose(128.4, 69.000)
+                                    new Pose(126.5, 74)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
@@ -101,11 +105,11 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreSet2 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(128.4, 69.000),
-
+                                    new Pose(126.5, 74),
                                     scorePose
                             )
-                    ).setTangentHeadingInterpolation().setReversed()
+                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(scoreHeading))
+
                     .build();
 
             grabSet3 = PedroComponent.follower().pathBuilder().addPath(
@@ -113,7 +117,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                                     scorePose,
                                     new Pose(88.941, 53.686),
                                     new Pose(96.582, 59.502),
-                                    new Pose(130, 58)
+                                    new Pose(131, 58)
                             )
                     ).setHeadingInterpolation(
                             HeadingInterpolator.piecewise(
@@ -137,9 +141,9 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             gateSet3 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(130, 58),
+                                    new Pose(131, 58),
                                     new Pose(105.151, 58.012),
-                                    new Pose(126, 69.000)
+                                    new Pose(126, 74)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
@@ -147,7 +151,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreSet3 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(126, 69.000),
+                                    new Pose(126, 74),
                                     scorePose
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(scoreHeading))
@@ -157,21 +161,22 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new BezierCurve(
                                     scorePose,
                                     new Pose(85, 29.598),
-                                    new Pose(96, 36.067),
-                                    new Pose(129, 35.5)
+                                    new Pose(92, 36.067),
+                                    new Pose(131, 35.5)
                             )
                     ).setHeadingInterpolation(
                             HeadingInterpolator.piecewise(
                                     new HeadingInterpolator.PiecewiseNode(
                                             0,
-                                            0.6,
-                                            HeadingInterpolator.linear(
-                                                    Math.toRadians(scoreHeading),
-                                                    Math.toRadians(0)
-                                            )
+                                            0.4,
+//                                        HeadingInterpolator.linear(
+//                                                Math.toRadians(scoreHeading),
+//                                                Math.toRadians(0)
+//                                        )
+                                            HeadingInterpolator.tangent
                                     ),
                                     new HeadingInterpolator.PiecewiseNode(
-                                            0.6,
+                                            0.4,
                                             1.0,
                                             HeadingInterpolator.constant(Math.toRadians(0))
                                     )
@@ -182,7 +187,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(129, 35.5),
+                                    new Pose(131, 35.5),
                                     scorePose
                             )
                     )
@@ -190,18 +195,18 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             HeadingInterpolator.piecewise(
                                     new HeadingInterpolator.PiecewiseNode(
                                             0,
-                                            0.1,
+                                            0.06,
                                             HeadingInterpolator.constant(Math.toRadians(0))
                                     ),
                                     new HeadingInterpolator.PiecewiseNode(
-                                            0.1,
-                                            0.8,
+                                            0.06,
+                                            0.6,
                                             HeadingInterpolator.tangent.reverse()
                                     ),
                                     new HeadingInterpolator.PiecewiseNode(
-                                            0.8,
+                                            0.6,
                                             1.0,
-                                            HeadingInterpolator.facingPoint(new Pose(139,141.5))
+                                            HeadingInterpolator.constant(Math.toRadians(scoreHeading))
                                     )
                             )
                     )
@@ -211,7 +216,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new BezierCurve(
                                     scorePose,
                                     new Pose(129, 58.000),
-                                    new Pose(132.000, 12.000)
+                                    new Pose(131, 12.000)
                             )
                     ).setTangentHeadingInterpolation()
 
@@ -219,7 +224,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreHp = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(132.000, 12.000),
+                                    new Pose(131, 12.000),
                                     new Pose(88, 110)
                             )
                     ).setHeadingInterpolation(
@@ -232,7 +237,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                                     new HeadingInterpolator.PiecewiseNode(
                                             0.9,
                                             1.0,
-                                            HeadingInterpolator.constant(Math.toRadians(30))
+                                            HeadingInterpolator.constant(Math.toRadians(32))
                                     )
                             )
                     )
@@ -252,85 +257,65 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
         private Command autonomous() {
             return new SequentialGroup(
+                    new ParallelGroup(
+                            new FollowPath(scorePreloads),
 
-                    new FollowPath(scorePreloads),
+                            s.i.shooterState(1100),
+                            Intakenf.INSTANCE.in(),
+
+                            new SequentialGroup(
+                                    new WaitUntil(() -> scorePreloads.lastPath().getDistanceRemaining() < 2),
+                                    new Delay(0.6),
+                                    s.i.shoot(1)
+                            )
+                    ),
                     new FollowPath(grabSet2),
                     new FollowPath(gateSet2),
-                    new Delay(1),
+                    new ParallelGroup(
+                            new FollowPath(scoreSet2),
 
-                    new FollowPath(scoreSet2),
+                            new SequentialGroup(
+                                    new WaitUntil(() -> scoreSet2.lastPath().getDistanceRemaining() < 0.2),
+                                    new Delay(0.4),
+                                    s.i.shoot(0.8)
+                            )
+                    ),
+
+
                     new FollowPath(grabSet3),
                     new FollowPath(gateSet3),
-                    new Delay(1),
+                    new Delay(0.4),
+                    new ParallelGroup(
+                            new FollowPath(scoreSet3),
 
-                    new FollowPath(scoreSet3),
+                            new SequentialGroup(
+                                    new WaitUntil(() -> scoreSet3.lastPath().getDistanceRemaining() < 0.2),
+                                    new Delay(0.2),
+                                    s.i.shoot(0.8)
+                            )
+                    ),
+//                    s.i.shoot(1),
+
                     new FollowPath(grabSet4),
-                    new FollowPath(scoreSet4),
-                    new Delay(1),
+                    new ParallelGroup(
+                            new FollowPath(scoreSet4),
 
-                    new FollowPath(grabHp),
-                    new FollowPath(scoreHp)
+                            new SequentialGroup(
+                                    new WaitUntil(() -> scoreSet4.lastPath().getDistanceRemaining() < 0.2),
+                                    new Delay(0.2),
+                                    s.i.shoot(0.8)
+                            )
+                    ),
+//                    new Delay(1),
 
+                    new ParallelGroup(
+                            new FollowPath(grabHp),
+                            s.i.shooterState(960,0.5)
 
-
-
-
-
-
-
-//                new ParallelDeadlineGroup(
-//                        new FollowPath(scorePreloads),
-//
-//                        Intakenf.INSTANCE.in(),
-//                        s.i.shooterState(1000,0.3),
-//                        s.i.shootSequence(scorePreloads,1)
-//                ),
-//                new Delay(0.8)
-
-//
-//                new ParallelDeadlineGroup(
-//                        f.i.follow(grabSet2)
-//                ),
-//                //Set 2
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreSet2, 0.8),
-//
-//                        f.i.follow(scoreSet2, "green"),
-//                        s.i.shooterState(1250,0.35)
-//                ),
-//
-//                //Set 3
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreSet3, 0.8),
-//
-//                        new SequentialGroup(
-//                                f.i.follow(grabSet3, "red"),
-//                                f.i.follow(scoreSet3, "green")
-//                        )
-//                ),
-//
-//                //Set 4
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreSet4, 0.8),
-//
-//                        new SequentialGroup(
-//                                f.i.follow(grabSet4, "red"),
-//                                f.i.follow(scoreSet4, "green")
-//                        )
-//                ),
-//
-//                //Hp
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreHp, 0.8),
-//
-//                        new SequentialGroup(
-//                                f.i.follow(grabHp, "red"),
-//                                f.i.follow(scoreHp, "green")
-//                        )
-//                )
-
-
-
+                    ),
+                    new FollowPath(scoreHp),
+                    new Delay(0.3),
+                    Stoppernf.INSTANCE.open()
             );
         }
 
@@ -345,7 +330,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
         @Override
         public void onStartButtonPressed() {
             autonomous().schedule();
-//        BaseShooternf.INSTANCE.enable();
+        BaseShooternf.INSTANCE.enable();
         }
 
         @Override

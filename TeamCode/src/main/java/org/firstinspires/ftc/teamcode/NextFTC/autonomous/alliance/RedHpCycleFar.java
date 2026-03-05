@@ -29,6 +29,7 @@ import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -56,7 +57,7 @@ public class RedHpCycleFar extends NextFTCOpMode {
     public PathChain grabUpCycle;
     public PathChain scoreUpCycle;
     public PathChain park;
-    public double scoreHeading = 68;
+    public double scoreHeading = 69;
 
     public Pose scorePose = new Pose(88,15);
 
@@ -129,7 +130,7 @@ public class RedHpCycleFar extends NextFTCOpMode {
 
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.37),
+                Hoodnf.INSTANCE.setHoodPos(0.32),
                 Stoppernf.INSTANCE.close()
         );
 
@@ -140,34 +141,34 @@ public class RedHpCycleFar extends NextFTCOpMode {
 
                 //Score Preloads
                 new ParallelGroup(
-                        f.i.follow(scorePreloads,"green"),
+                        new FollowPath(scorePreloads),
 
                         Intakenf.INSTANCE.in(),
-                        Shooternf.INSTANCE.setShooterVel(-1550)
+                        Shooternf.INSTANCE.setShooterVel(-1300)
                 ),
-                s.i.shoot(1, 1.0),
+                s.i.shoot(2, 0.6),
 
                 //Set 2
-                f.i.follow(grabDownCycle, "red"),
-                f.i.follow(scoreDownCycle, "green"),
-                s.i.shoot(1,1.0),
+                new FollowPath(grabDownCycle),
+                new FollowPath(scoreDownCycle),
+                s.i.shoot(1.5,0.8),
 
                 //Set 3
-                f.i.follow(grabUpCycle, "red"),
-                f.i.follow(scoreUpCycle, "green"),
-                s.i.shoot(1,1.0),
+                new FollowPath(grabDownCycle),
+                new FollowPath(scoreDownCycle),
+                s.i.shoot(1.5,0.8),
 
                 //Set 4
-                f.i.follow(grabDownCycle, "red"),
-                f.i.follow(scoreDownCycle, "green"),
-                s.i.shoot(1,1.0),
+                new FollowPath(grabDownCycle),
+                new FollowPath(scoreDownCycle),
+                s.i.shoot(1.5,0.8),
 
                 //Set 5
-                f.i.follow(grabDownCycle, "red"),
-                f.i.follow(scoreDownCycle, "green"),
-                s.i.shoot(1,1.0),
+                new FollowPath(grabDownCycle),
+                new FollowPath(scoreDownCycle),
+                s.i.shoot(1.5,0.8),
 
-                f.i.follow(park,"green")
+                new FollowPath(park)
 
 
         );

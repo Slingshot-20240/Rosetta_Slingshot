@@ -21,9 +21,9 @@ public class BaseShooternf implements Subsystem {
     public MotorGroup shooter;
 
     private final ControlSystem closeShooterController = ControlSystem.builder()
-            .velPid(3.5, 0, 0.002)
+            .velPid(20, 0, 0.002)
             //old 3.5, 0.002, ff = 0.001
-            .basicFF(0.001)
+            .basicFF(0.003)
             .build();
 
     private final ControlSystem farShooterController = ControlSystem.builder()
