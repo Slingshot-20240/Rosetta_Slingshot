@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -9,19 +7,12 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.misc.PIDFControllerEx;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
 
 @Config
 @TeleOp
@@ -36,19 +27,29 @@ public class NikethTele extends OpMode {
     public static double tolerance = 0.01;
 
     // Vision tuning
-    public static double visionTurn_kP = 0.04;
-    public static double visionMinTurnPower = 0.07;
-    public static double visionMiniTolerance = 0.01;
+//    public static double visionTurn_kP = 0.04;
+//    public static double visionMinTurnPower = 0.07;
+//    public static double visionMiniTolerance = 0.01;
+//
+//    public static double kP = 0.05;
+//
+//    // Bee tuning
+//    private double targetAngle = 0;
+//    public static double turnP = 3;
+//    public static double turnI = 0;
+//    public static double turnD = 0.0001;
+//    public static double turnF = 1;
+//    private PIDFControllerEx turnController = new PIDFControllerEx(turnP, turnI, turnD, turnF);
 
-    public static double kP = 0.05;
+    // Odo tuning
+    public static double odoTurn_kP = 0.3;
+    public static double odoMinTurnPower = 0.08;
+    public static double odoDistance;
 
-    // Bee tuning
-    private double targetAngle = 0;
-    public static double turnP = 0.013;
-    public static double turnI = 0;
-    public static double turnD = 0.0001;
-    public static double turnF = 0;
-    private PIDFControllerEx turnController = new PIDFControllerEx(turnP, turnI, turnD, turnF);
+    // ODO target
+    public static double GOAL_X = 138;
+    public static double GOAL_Y = 138;
+
 
     @Override
     public void init() {
@@ -69,23 +70,19 @@ public class NikethTele extends OpMode {
 
     @Override
     public void start() {
-        //robot.hardwareSoftReset();
         follower.startTeleopDrive(true);
     }
 
     @Override
     public void loop() {
-
         fsm.update();
         follower.update();
         telemetryM.update();
         telemetry.update();
 
-//        double visionBearing = Math.toRadians(Robot.cam.getATangle());
-//        double visionError = Math.abs(visionBearing);
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
-
+        odoDistance = pose.distanceFrom(new Pose(138,138));
 
         boolean controllerBusy =
                 Math.abs(gamepad1.left_stick_x) > 0.05 ||
@@ -93,13 +90,46 @@ public class NikethTele extends OpMode {
                         Math.abs(gamepad1.right_stick_x) > 0.05;
 
 
-    //Drive Controls ----------------------------------------------------------------
-        double forward = -Math.pow(gamepad1.left_stick_y, 5);
-        double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
-        double rotate = 0;
+    // Drive Controls ----------------------------------------------------------------//
 
+    double forward = -Math.pow(gamepad1.left_stick_y, 5);
+    double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
+    double rotate;
 
-//
+    if (gamepad1.y) {
+
+        double dx = GOAL_X - pose.getX();
+        double dy = GOAL_Y - pose.getY();
+        double targetHeading = Math.atan2(dy, dx);
+        double odoHeadingError = angleWrap(targetHeading - heading);
+        boolean odoTurnFinished =
+                Math.abs(odoHeadingError) < tolerance;
+
+        forward = 0;
+        strafe = 0;
+
+        double error;
+        double kP;
+        double minPower;
+        double miniTolerance;
+
+        error = odoHeadingError;
+        kP = odoTurn_kP;
+        minPower = odoMinTurnPower;
+        miniTolerance = tolerance;
+
+        rotate = error * kP;
+
+        if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
+            rotate = Math.signum(rotate) * minPower;
+        }
+
+    } else {
+        rotate = -gamepad1.right_stick_x * 0.55;
+    }
+
+    follower.setTeleOpDrive(forward, strafe, rotate, true);
+
 //        } else if (controllerBusy) {
 //            if (gamepad1.right_bumper) {
 //                follower.setTeleOpDrive(forward, strafe, rotate, true);
@@ -155,14 +185,14 @@ public class NikethTele extends OpMode {
         // bee rotate logic
 
         //Tank-Mecanum Override
-        if (gamepad1.y) {
-            double visionHeading = Robot.cam.getATangle();
-            rotate = lockHeading(visionHeading);
-            follower.setTeleOpDrive(forward, strafe, rotate, true);
-        } else {
-            rotate = -gamepad1.right_stick_x * 0.55;
-            follower.setTeleOpDrive(forward, strafe, rotate, true);
-        }
+//        if (gamepad1.y) {
+//            double visionHeading = Robot.cam.getATangle();
+//            rotate = lockHeading(visionHeading);
+//            follower.setTeleOpDrive(forward, strafe, rotate, true);
+//        } else {
+//            rotate = -gamepad1.right_stick_x * 0.55;
+//            follower.setTeleOpDrive(forward, strafe, rotate, true);
+//        }
 
 //        //Rumble Settings
 //        if (Math.abs(visionHeadingError) < 1) {
@@ -188,11 +218,11 @@ public class NikethTele extends OpMode {
         return angle;
     }
 
-    public double lockHeading(double targetAngle) {
-        double wrappedTarget = angleWrap(targetAngle);
-        double pid = turnController.calculate(wrappedTarget, false);
-        return pid + turnF;
-    }
+//    public double lockHeading(double targetAngle) {
+//        double wrappedTarget = angleWrap(targetAngle);
+//        double pid = turnController.calculate(wrappedTarget, false);
+//        return pid + turnF;
+//    }
 
 
 
