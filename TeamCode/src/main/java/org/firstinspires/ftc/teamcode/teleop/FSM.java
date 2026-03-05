@@ -84,14 +84,14 @@ public class FSM {
 
                     // variables
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
-                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 100;
+                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 50;
                     double targetHoodPos;
 
                     // calculate target
-                    if (Robot.cam.getATdist() < 54) {
-                        targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.2;
+                    if (Robot.cam.getATdist() > 100) {
+                        targetHoodPos = robot.shooter.calculateHoodPos(distance) - 0.2;
                     } else {
-                        targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
+                        targetHoodPos = robot.shooter.calculateHoodPos(distance);
                     }
 
                     if (Robot.cam.getATdist() != 0) {
@@ -104,11 +104,7 @@ public class FSM {
                         robot.shooter.setShooterVelocity(lastVelo);
                     } else {
                         // get position will get last passed position so uh hopefully that should work
-                        if (Robot.cam.getTargetArtifactTravelDistanceX() > FAR_THRESHOLD && robot.shooter.variableHood.getPosition() < MAX_HOOD_POS - HOOD_OFFSET) {
-                            robot.shooter.setHoodAngle(targetHoodPos + HOOD_OFFSET); // TODO tune offset
-                        } else {
-                            robot.shooter.setHoodAngle(targetHoodPos);
-                        }
+                        robot.shooter.setHoodAngle(targetHoodPos);
                         robot.shooter.setShooterVelocity(targetVelocity); // TODO maybe add offset
                     }
 

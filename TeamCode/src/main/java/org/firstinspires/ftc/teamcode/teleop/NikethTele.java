@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -15,6 +17,11 @@ import org.firstinspires.ftc.teamcode.misc.PIDFControllerEx;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 
 @Config
 @TeleOp
@@ -42,6 +49,7 @@ public class NikethTele extends OpMode {
     public static double turnD = 0.0001;
     public static double turnF = 0;
     private PIDFControllerEx turnController = new PIDFControllerEx(turnP, turnI, turnD, turnF);
+
 
     @Override
     public void init() {
@@ -91,9 +99,7 @@ public class NikethTele extends OpMode {
         double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
         double rotate = 0;
 
-//        //TODO - try holding and also pressing
-//        if (gamepad1.aWasPressed()) {
-//            follower.turn(Math.toRadians(visionBearing));
+
 //
 //        } else if (controllerBusy) {
 //            if (gamepad1.right_bumper) {
@@ -119,6 +125,9 @@ public class NikethTele extends OpMode {
         double visionHeadingError = angleWrap(visionBearing);
         boolean visionTurnFinished =
                 Math.abs(visionHeadingError) < tolerance;
+
+        //        //TODO - try holding and also pressing
+
         //------------- rotate logic -------------\\
 
         double error;
@@ -147,10 +156,14 @@ public class NikethTele extends OpMode {
         // bee rotate logic
 
         //Tank-Mecanum Override
-        if (gamepad1.left_trigger > 0.1) {
-            follower.setTeleOpDrive(forward, strafe, rotate, true);
+        if (gamepad1.y) {
+
         } else {
-            follower.setTeleOpDrive(forward, 0, rotate, true);
+            if (gamepad1.left_trigger > 0.1) {
+                follower.setTeleOpDrive(forward, strafe, rotate, true);
+            } else {
+                follower.setTeleOpDrive(forward, 0, rotate, true);
+            }
         }
 
 //        //Rumble Settings
@@ -163,6 +176,7 @@ public class NikethTele extends OpMode {
         // Telemetry
         telemetry.addData("Pose", pose.toString());
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
+        telemetry.addData("AT Distance", Robot.cam.getATdist());
     }
 
     @Override
@@ -183,4 +197,7 @@ public class NikethTele extends OpMode {
         double power = pid + turnF;
         return -power;
     }
+
+
+
 }

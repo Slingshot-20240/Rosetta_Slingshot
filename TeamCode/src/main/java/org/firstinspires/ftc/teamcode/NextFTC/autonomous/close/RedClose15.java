@@ -236,7 +236,7 @@ public class RedClose15 extends NextFTCOpMode {
         return new SequentialGroup(
                 Hoodnf.INSTANCE.setHoodPos(0.29),
 
-                Stoppernf.INSTANCE.open()
+                Stoppernf.INSTANCE.close()
         );
 
     }

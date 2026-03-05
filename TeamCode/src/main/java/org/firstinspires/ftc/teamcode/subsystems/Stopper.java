@@ -20,7 +20,7 @@ public class Stopper {
     }
 
     public void stop() {
-        stopper.setPosition(0.6);
+        stopper.setPosition(0.7);
     }
 }
 
