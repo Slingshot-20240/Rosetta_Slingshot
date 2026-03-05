@@ -24,6 +24,7 @@ import org.opencv.core.Mat;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -185,13 +186,13 @@ public class RedClose15 extends NextFTCOpMode {
                                 ),
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.1,
-                                        0.8,
+                                        0.6,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.8,
+                                        0.6,
                                         1.0,
-                                        HeadingInterpolator.facingPoint(new Pose(139,141.5))
+                                        HeadingInterpolator.facingPoint(new Pose(141.5,141.5))
                                 )
                         )
                 )
@@ -246,20 +247,24 @@ public class RedClose15 extends NextFTCOpMode {
 
                 new ParallelGroup(
                         new FollowPath(scorePreloads),
-                        s.i.shooterState(1000),
+
+                        s.i.shooterState(1100),
                         Intakenf.INSTANCE.in()
                 ),
-//                new SequentialGroup(
-                        Stoppernf.INSTANCE.open(),
-                        new Delay(0.9),
-                        Stoppernf.INSTANCE.close(),
-//                ),
-
+                s.i.shoot(1),
 
 
                 new FollowPath(grabSet2),
-                new FollowPath(scoreSet2),
-                s.i.shoot(1),
+
+                new ParallelGroup(
+                        new FollowPath(scoreSet2),
+
+                        new SequentialGroup(
+                                new WaitUntil(() -> scoreSet2.lastPath().isAtParametricEnd()),
+                                s.i.shoot(1)
+                        )
+                ),
+
 
                 new FollowPath(grabSet3),
                 new FollowPath(gateSet3),
@@ -272,65 +277,8 @@ public class RedClose15 extends NextFTCOpMode {
                 new Delay(1),
 
                 new FollowPath(grabHp),
-                new FollowPath(scoreHp)
-
-
-
-
-
-
-
-
-//                new ParallelDeadlineGroup(
-//                        new FollowPath(scorePreloads),
-//
-//                        Intakenf.INSTANCE.in(),
-//                        s.i.shooterState(1000,0.3),
-//                        s.i.shootSequence(scorePreloads,1)
-//                ),
-//                new Delay(0.8)
-
-//
-//                new ParallelDeadlineGroup(
-//                        f.i.follow(grabSet2)
-//                ),
-//                //Set 2
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreSet2, 0.8),
-//
-//                        f.i.follow(scoreSet2, "green"),
-//                        s.i.shooterState(1250,0.35)
-//                ),
-//
-//                //Set 3
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreSet3, 0.8),
-//
-//                        new SequentialGroup(
-//                                f.i.follow(grabSet3, "red"),
-//                                f.i.follow(scoreSet3, "green")
-//                        )
-//                ),
-//
-//                //Set 4
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreSet4, 0.8),
-//
-//                        new SequentialGroup(
-//                                f.i.follow(grabSet4, "red"),
-//                                f.i.follow(scoreSet4, "green")
-//                        )
-//                ),
-//
-//                //Hp
-//                new ParallelDeadlineGroup(
-//                        s.i.shootSequence(scoreHp, 0.8),
-//
-//                        new SequentialGroup(
-//                                f.i.follow(grabHp, "red"),
-//                                f.i.follow(scoreHp, "green")
-//                        )
-//                )
+                new FollowPath(scoreHp),
+                s.i.shoot(1)
 
 
 
