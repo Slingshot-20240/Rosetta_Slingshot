@@ -90,6 +90,7 @@ public class FSM {
                     // calculate target
                     if (Robot.cam.getATdist() > 100) {
                         targetHoodPos = robot.shooter.calculateHoodPos(distance) - 0.2;
+                        targetVelocity = targetVelocity + 100;
                     } else {
                         targetHoodPos = robot.shooter.calculateHoodPos(distance);
                     }
@@ -105,16 +106,16 @@ public class FSM {
                     } else {
                         // get position will get last passed position so uh hopefully that should work
                         robot.shooter.setHoodAngle(targetHoodPos);
-                        robot.shooter.setShooterVelocity(targetVelocity); // TODO maybe add offset
+                        robot.shooter.setShooterVelocity(targetVelocity + 50); // TODO maybe add offset
                     }
 
                     // set LED states
                     if (Robot.cam.getTargetArtifactTravelDistanceX() != 22) {
-                        robot.ledBoard0.setState(true);
+                        robot.ledBoard0.setState(false);
                         robot.ledBoard1.setState(true);
                     } else {
                         robot.ledBoard0.setState(false);
-                        robot.ledBoard1.setState(true);
+                        robot.ledBoard1.setState(false);
                     }
                 }
 

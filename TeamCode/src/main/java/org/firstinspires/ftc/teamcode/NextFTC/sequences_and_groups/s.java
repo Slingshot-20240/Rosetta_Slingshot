@@ -7,9 +7,7 @@ import com.pedropathing.paths.PathChain;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.BaseShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 import dev.nextftc.core.commands.Command;
@@ -18,7 +16,6 @@ import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.subsystems.SubsystemGroup;
-import dev.nextftc.extensions.pedro.PedroComponent;
 
 //AUTON SEQUENCES CLOSE
 public class s extends SubsystemGroup {

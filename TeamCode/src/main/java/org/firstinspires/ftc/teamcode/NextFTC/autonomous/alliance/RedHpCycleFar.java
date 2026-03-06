@@ -7,8 +7,6 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
-import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -18,14 +16,11 @@ import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 //import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.FarShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.opencv.core.Mat;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -43,7 +38,7 @@ public class RedHpCycleFar extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, s.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Stoppernf.INSTANCE
+                        FarShooternf.INSTANCE, Stoppernf.INSTANCE
 //                        Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -144,7 +139,7 @@ public class RedHpCycleFar extends NextFTCOpMode {
                         new FollowPath(scorePreloads),
 
                         Intakenf.INSTANCE.in(),
-                        Shooternf.INSTANCE.setShooterVel(-1300)
+                        FarShooternf.INSTANCE.setShooterVel(-1300)
                 ),
                 s.i.shoot(2, 0.6),
 
@@ -179,13 +174,13 @@ public class RedHpCycleFar extends NextFTCOpMode {
     public void onInit() {
         buildPaths();
         init_bot().schedule();
-        Shooternf.INSTANCE.disable();
+        FarShooternf.INSTANCE.disable();
     }
 
     @Override
     public void onStartButtonPressed() {
         autonomous().schedule();
-        Shooternf.INSTANCE.enable();
+        FarShooternf.INSTANCE.enable();
     }
 
     @Override

@@ -160,23 +160,23 @@ import dev.nextftc.ftc.components.BulkReadComponent;
             grabSet4 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierCurve(
                                     scorePose,
-                                    new Pose(85, 29.598),
-                                    new Pose(92, 36.067),
+                                    new Pose(85, 28),
+                                    new Pose(90, 37),
                                     new Pose(131, 35.5)
                             )
                     ).setHeadingInterpolation(
                             HeadingInterpolator.piecewise(
                                     new HeadingInterpolator.PiecewiseNode(
                                             0,
-                                            0.4,
-//                                        HeadingInterpolator.linear(
-//                                                Math.toRadians(scoreHeading),
-//                                                Math.toRadians(0)
-//                                        )
-                                            HeadingInterpolator.tangent
+                                            0.1,
+                                            HeadingInterpolator.linear(
+                                                    Math.toRadians(scoreHeading),
+                                                    Math.toRadians(0)
+                                            )
+//                                        HeadingInterpolator.tangent
                                     ),
                                     new HeadingInterpolator.PiecewiseNode(
-                                            0.4,
+                                            0.1,
                                             1.0,
                                             HeadingInterpolator.constant(Math.toRadians(0))
                                     )
@@ -216,7 +216,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new BezierCurve(
                                     scorePose,
                                     new Pose(129, 58.000),
-                                    new Pose(131, 12.000)
+                                    new Pose(130, 12.000)
                             )
                     ).setTangentHeadingInterpolation()
 
@@ -224,7 +224,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreHp = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(131, 12.000),
+                                    new Pose(130, 12.000),
                                     new Pose(88, 110)
                             )
                     ).setHeadingInterpolation(
@@ -260,7 +260,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                     new ParallelGroup(
                             new FollowPath(scorePreloads),
 
-                            s.i.shooterState(1100),
+                            s.i.shooterState(1120),
                             Intakenf.INSTANCE.in(),
 
                             new SequentialGroup(
@@ -277,7 +277,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new SequentialGroup(
                                     new WaitUntil(() -> scoreSet2.lastPath().getDistanceRemaining() < 0.2),
                                     new Delay(0.4),
-                                    s.i.shoot(0.8)
+                                    s.i.shoot(0.6)
                             )
                     ),
 
@@ -291,7 +291,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new SequentialGroup(
                                     new WaitUntil(() -> scoreSet3.lastPath().getDistanceRemaining() < 0.2),
                                     new Delay(0.2),
-                                    s.i.shoot(0.8)
+                                    s.i.shoot(0.6)
                             )
                     ),
 //                    s.i.shoot(1),
@@ -303,7 +303,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new SequentialGroup(
                                     new WaitUntil(() -> scoreSet4.lastPath().getDistanceRemaining() < 0.2),
                                     new Delay(0.2),
-                                    s.i.shoot(0.8)
+                                    s.i.shoot(0.6)
                             )
                     ),
 //                    new Delay(1),

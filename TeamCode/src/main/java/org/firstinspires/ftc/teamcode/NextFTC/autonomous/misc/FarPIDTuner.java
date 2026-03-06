@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.NextFTC.autonomous.misc;
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,7 +12,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.s;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.FarShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -22,7 +20,6 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -36,7 +33,7 @@ public class FarPIDTuner extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, s.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Stoppernf.INSTANCE
+                        FarShooternf.INSTANCE, Stoppernf.INSTANCE
 //                        Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -74,7 +71,7 @@ public class FarPIDTuner extends NextFTCOpMode {
                         //new FollowPath(scorePreloads),
 
                         Intakenf.INSTANCE.in(),
-                        Shooternf.INSTANCE.setShooterVel(-1300)
+                        FarShooternf.INSTANCE.setShooterVel(-1300)
                 ),
                 s.i.shoot(2, 0.6)
 
@@ -86,13 +83,13 @@ public class FarPIDTuner extends NextFTCOpMode {
     public void onInit() {
         buildPaths();
         init_bot().schedule();
-        Shooternf.INSTANCE.disable();
+        FarShooternf.INSTANCE.disable();
     }
 
     @Override
     public void onStartButtonPressed() {
         autonomous().schedule();
-        Shooternf.INSTANCE.enable();
+        FarShooternf.INSTANCE.enable();
     }
 
     @Override

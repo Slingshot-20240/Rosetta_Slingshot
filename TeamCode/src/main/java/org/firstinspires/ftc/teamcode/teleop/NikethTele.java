@@ -7,9 +7,10 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
-import org.firstinspires.ftc.teamcode.misc.PIDFControllerEx;
 import org.firstinspires.ftc.teamcode.teleop.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -23,33 +24,23 @@ public class NikethTele extends OpMode {
     private Robot robot;
     private Follower follower;
     private TelemetryManager telemetryM;
+    VoltageSensor voltageSensor;
 
-    public static double tolerance = 0.01;
 
-    // Vision tuning
-//    public static double visionTurn_kP = 0.04;
-//    public static double visionMinTurnPower = 0.07;
-//    public static double visionMiniTolerance = 0.01;
-//
-//    public static double kP = 0.05;
-//
-//    // Bee tuning
-//    private double targetAngle = 0;
-//    public static double turnP = 3;
-//    public static double turnI = 0;
-//    public static double turnD = 0.0001;
-//    public static double turnF = 1;
-//    private PIDFControllerEx turnController = new PIDFControllerEx(turnP, turnI, turnD, turnF);
 
-    // Odo tuning
-    public static double odoTurn_kP = 0.3;
-    public static double odoMinTurnPower = 0.08;
     public static double odoDistance;
 
-    // ODO target
-    public static double GOAL_X = 138;
-    public static double GOAL_Y = 138;
+    // ---------------- AUTO TURN ALIGN ----------------
+    private static final double TX_THRESHOLD_DEG = 1.0;
+    private static final double BLUE_TX_OFFSET_DEG = 5.0;
+    private static final double RED_TX_OFFSET_DEG = -5.0;
 
+    static double MAX_TURN_POWER = 0.55;
+    public static double kP_TURN = 0.0095;
+    public static double kD_TURN = 0.002;
+
+    private double lastErr = 0.0;
+    private boolean alignedLastLoop = false;
 
     @Override
     public void init() {
@@ -80,6 +71,10 @@ public class NikethTele extends OpMode {
         telemetryM.update();
         telemetry.update();
 
+//        if (voltageSensor.getVoltage() < 9) {
+//            stop();
+//        }
+
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
         odoDistance = pose.distanceFrom(new Pose(138,138));
@@ -92,107 +87,82 @@ public class NikethTele extends OpMode {
 
     // Drive Controls ----------------------------------------------------------------//
 
-    double forward = -Math.pow(gamepad1.left_stick_y, 5);
-    double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
-    double rotate;
+        double forward = -Math.pow(gamepad1.left_stick_y, 5);
+        double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
+        double rotate;
 
-    if (gamepad1.y) {
 
-        double dx = GOAL_X - pose.getX();
-        double dy = GOAL_Y - pose.getY();
-        double targetHeading = Math.atan2(dy, dx);
-        double odoHeadingError = angleWrap(targetHeading - heading);
-        boolean odoTurnFinished =
-                Math.abs(odoHeadingError) < tolerance;
-
-        forward = 0;
-        strafe = 0;
-
-        double error;
-        double kP;
-        double minPower;
-        double miniTolerance;
-
-        error = odoHeadingError;
-        kP = odoTurn_kP;
-        minPower = odoMinTurnPower;
-        miniTolerance = tolerance;
-
-        rotate = error * kP;
-
-        if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
-            rotate = Math.signum(rotate) * minPower;
-        }
-
-    } else {
-        rotate = -gamepad1.right_stick_x * 0.55;
-    }
-
-    follower.setTeleOpDrive(forward, strafe, rotate, true);
-
-//        } else if (controllerBusy) {
-//            if (gamepad1.right_bumper) {
-//                follower.setTeleOpDrive(forward, strafe, rotate, true);
-//            } else {
-//                follower.setTeleOpDrive(forward, 0, rotate, true);
-//            }
+//    if (gamepad1.aWasPressed()) {
+//         follower.setPose(new Pose(141.5,0, Math.toRadians(90)));
+//    }
+//    if (gamepad1.y) {
 //
-//        }
-
-
-//    //Auto Align
-//        if (gamepad1.right_trigger > 0.1) {
-//            rotate = visionBearing * kP;
-//        } else {
-//            rotate = -Math.pow(gamepad1.right_stick_x, 5);
-//        }
-//        rotate = Math.max(-1.0, Math.min(1.0, rotate));
-
-        //------------- error calculation -------------\\
-        // Vision error
-//        double visionBearing = Math.toRadians(Robot.cam.getATangle());
-//        double visionHeadingError = angleWrap(visionBearing);
-//        boolean visionTurnFinished =
-//                Math.abs(visionHeadingError) < tolerance;
-
-        //        //TODO - try holding and also pressing
-
-        //------------- rotate logic -------------\\
-
+//        double dx = GOAL_X - pose.getX();
+//        double dy = GOAL_Y - pose.getY();
+//        double targetHeading = Math.atan2(dy, dx);
+//        double odoHeadingError = angleWrap(targetHeading - heading);
+//        boolean odoTurnFinished =
+//                Math.abs(odoHeadingError) < tolerance;
+//
+//        forward = 0;
+//        strafe = 0;
+//
 //        double error;
 //        double kP;
 //        double minPower;
 //        double miniTolerance;
 //
-//        error = visionHeadingError;
-//        kP = visionTurn_kP;
-//        minPower = visionMinTurnPower;
-//        miniTolerance = visionMiniTolerance;
+//        error = odoHeadingError;
+//        kP = odoTurn_kP;
+//        minPower = odoMinTurnPower;
+//        miniTolerance = tolerance;
 //
-//        if (gamepad1.a) {
-//            forward = 0;
-//            strafe = 0;
+//        rotate = error * kP;
 //
-//            rotate = error * kP;
-//
-//            if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
-//                rotate = Math.signum(rotate) * minPower;
-//            }
-//        } else {
-//            rotate = -gamepad1.right_stick_x * 0.55;
+//        if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
+//            rotate = Math.signum(rotate) * minPower;
 //        }
+//
+//    } else {
+//        rotate = -gamepad1.right_stick_x * 0.55;
+//    }
 
-        // bee rotate logic
 
-        //Tank-Mecanum Override
-//        if (gamepad1.y) {
-//            double visionHeading = Robot.cam.getATangle();
-//            rotate = lockHeading(visionHeading);
-//            follower.setTeleOpDrive(forward, strafe, rotate, true);
-//        } else {
-//            rotate = -gamepad1.right_stick_x * 0.55;
-//            follower.setTeleOpDrive(forward, strafe, rotate, true);
-//        }
+    // ---------------- AUTO ALIGN ----------------
+    if (gamepad1.right_trigger > 0.1) {
+        telemetry.addData("ALIGNING","true");
+        double error = Robot.cam.getATangle();
+        double derivative = error - lastErr;
+
+        lastErr = error;
+
+        if (Robot.cam.getATdist() > 100) {
+            telemetry.addLine("Far");
+            MAX_TURN_POWER = 0.65;
+            kP_TURN = 0.015;
+            kD_TURN = 0.001;
+        } else {
+            telemetry.addLine("Close");
+            MAX_TURN_POWER = 0.55;
+            kP_TURN = 0.0095;
+            kD_TURN = 0.002;
+
+        }
+        double turnCmd = (kP_TURN * error) + (kD_TURN * derivative);
+
+        rotate = Range.clip(turnCmd, -MAX_TURN_POWER, MAX_TURN_POWER);
+        follower.setTeleOpDrive(0, 0, rotate, true);
+
+    } else {
+        lastErr = 0;
+        if (gamepad1.left_trigger > 0.1) {
+            telemetry.addData("Mecanum Override", true);
+            follower.setTeleOpDrive(forward, strafe, -(Math.pow(gamepad1.right_stick_x,3)) * 0.8, true);
+        } else {
+            follower.setTeleOpDrive(forward, 0, -(Math.pow(gamepad1.right_stick_x, 3)) * 0.8, true);
+        }
+    }
+
 
 //        //Rumble Settings
 //        if (Math.abs(visionHeadingError) < 1) {
@@ -200,6 +170,8 @@ public class NikethTele extends OpMode {
 //        } else {
 //            gamepad1.stopRumble();
 //        }
+
+
 
         // Telemetry
         telemetry.addData("Pose", pose.toString());

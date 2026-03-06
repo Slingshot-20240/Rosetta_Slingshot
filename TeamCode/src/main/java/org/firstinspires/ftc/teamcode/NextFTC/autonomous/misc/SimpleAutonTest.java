@@ -8,7 +8,6 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -18,7 +17,6 @@ import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.s;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.BaseShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 
