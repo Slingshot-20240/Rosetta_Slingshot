@@ -65,7 +65,7 @@ public class BlueClose15 extends NextFTCOpMode {
     public PathChain park;
 
     public Pose scorePose = new Pose(90,88).mirror();
-    public double scoreHeading = 180-44;
+    public double scoreHeading = 180-40;
 
     public void buildPaths() {
         follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)).mirror());
@@ -75,7 +75,7 @@ public class BlueClose15 extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(126.2, 119).mirror(), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180-36), Math.toRadians(180-43))
+                .setLinearHeadingInterpolation(Math.toRadians(180-36), Math.toRadians(180-44))
 //                .setTangentHeadingInterpolation().setReversed()
                 .build();
 
@@ -87,7 +87,7 @@ public class BlueClose15 extends NextFTCOpMode {
                         new BezierCurve(
                                 scorePose,
                                 new Pose(92.292, 77).mirror(),
-                                new Pose(126.3, 82.9).mirror()
+                                new Pose(125.9, 82.9).mirror()
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180-0))
@@ -95,7 +95,7 @@ public class BlueClose15 extends NextFTCOpMode {
 
         scoreSet2 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(126.3, 82.9).mirror(),
+                                new Pose(125.9, 82.9).mirror(),
                                 scorePose
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(scoreHeading))
@@ -107,7 +107,7 @@ public class BlueClose15 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(88.941, 53.686).mirror(),
                                 new Pose(96.582, 59.502).mirror(),
-                                new Pose(131, 58).mirror()
+                                new Pose(130, 58).mirror()
                         )
                 ).setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -131,7 +131,7 @@ public class BlueClose15 extends NextFTCOpMode {
 
         gateSet3 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
-                                new Pose(131, 58).mirror(),
+                                new Pose(130, 58).mirror(),
                                 new Pose(105.151, 58.012).mirror(),
                                 new Pose(127.2, 74).mirror()
                         )
@@ -152,7 +152,7 @@ public class BlueClose15 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(85, 29).mirror(),
                                 new Pose(94, 36).mirror(),
-                                new Pose(131, 34.2).mirror()
+                                new Pose(130, 34.2).mirror()
                         )
                 ).setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -177,7 +177,7 @@ public class BlueClose15 extends NextFTCOpMode {
 
         scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(131, 34.2).mirror(),
+                                new Pose(130, 34.2).mirror(),
                                 scorePose
                         )
                 )
@@ -196,7 +196,7 @@ public class BlueClose15 extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.6,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(scoreHeading))
+                                        HeadingInterpolator.constant(Math.toRadians(scoreHeading+1))
                                 )
                         )
                 )
@@ -206,7 +206,7 @@ public class BlueClose15 extends NextFTCOpMode {
                         new BezierCurve(
                                 scorePose,
                                 new Pose(129, 58.000).mirror(),
-                                new Pose(133, 12.000).mirror()
+                                new Pose(132, 12.000).mirror()
                         )
                 ).setTangentHeadingInterpolation()
 
@@ -214,7 +214,7 @@ public class BlueClose15 extends NextFTCOpMode {
 
         scoreHp = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(133, 12.000).mirror(),
+                                new Pose(132, 12.000).mirror(),
                                 new Pose(88, 110).mirror()
                         )
                 ).setHeadingInterpolation(
@@ -249,7 +249,7 @@ public class BlueClose15 extends NextFTCOpMode {
 
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.32),
+                Hoodnf.INSTANCE.setHoodPos(0.345),
                 Stoppernf.INSTANCE.close()
         );
 
@@ -258,29 +258,26 @@ public class BlueClose15 extends NextFTCOpMode {
     private Command autonomous() {
         return new SequentialGroup(
 
-                new ParallelGroup(
+                new ParallelDeadlineGroup(
                         new FollowPath(scorePreloads),
+                        BaseShooternf.INSTANCE.setShooterVel(1100),
 
-                        s.i.shooterState(1120),
-                        Intakenf.INSTANCE.in(),
-
-                        new SequentialGroup(
-                                new WaitUntil(() -> scorePreloads.lastPath().getDistanceRemaining() < 2),
-                                new Delay(0.5),
-                                s.i.shoot(0.6)
-                        )
+                        Intakenf.INSTANCE.in()
                 ),
+                new Delay(0.5),
+                s.i.shoot(0.7),
+
                 new FollowPath(grabSet2),
                 new Delay(0.1),
 
                 new ParallelGroup(
                         new FollowPath(scoreSet2),
-                        Hoodnf.INSTANCE.setHoodPos(0.3),
+                        Hoodnf.INSTANCE.setHoodPos(0.37),
 
                         new SequentialGroup(
                                 new WaitUntil(() -> scoreSet2.lastPath().getDistanceRemaining() < 0.2),
-                                new Delay(0.4),
-                                s.i.shoot(0.6)
+                                new Delay(0.3),
+                                s.i.shoot(0.5)
                         )
                 ),
 
@@ -288,14 +285,15 @@ public class BlueClose15 extends NextFTCOpMode {
                 new FollowPath(grabSet3),
                 new Delay(0.1),
                 new FollowPath(gateSet3),
-                new Delay(0.6),
+                new Delay(0.5),
+
                 new ParallelGroup(
                         new FollowPath(scoreSet3),
 
                         new SequentialGroup(
                                 new WaitUntil(() -> scoreSet3.lastPath().getDistanceRemaining() < 0.2),
-                                new Delay(0.4),
-                                s.i.shoot(0.6)
+                                new Delay(0.3),
+                                s.i.shoot(0.5)
                         )
                 ),
                 s.i.shoot(1),
@@ -307,8 +305,8 @@ public class BlueClose15 extends NextFTCOpMode {
 
                         new SequentialGroup(
                                 new WaitUntil(() -> scoreSet4.lastPath().getDistanceRemaining() < 0.2),
-                                new Delay(0.4),
-                                s.i.shoot(0.6)
+                                new Delay(0.3),
+                                s.i.shoot(0.5)
                         )
                 ),
                 new Delay(0.5),
@@ -318,9 +316,9 @@ public class BlueClose15 extends NextFTCOpMode {
                         s.i.shooterState(960,0.5)
 
                 ),
-                new Delay(0.2),
+                new Delay(0.1),
                 new FollowPath(scoreHp),
-                new Delay(0.5),
+                new Delay(0.4),
                 Stoppernf.INSTANCE.open()
 //                s.i.shoot(1)
 //                new FollowPath(park)

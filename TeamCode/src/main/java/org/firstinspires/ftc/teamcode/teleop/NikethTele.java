@@ -35,8 +35,8 @@ public class NikethTele extends OpMode {
     private static final double BLUE_TX_OFFSET_DEG = 5.0;
     private static final double RED_TX_OFFSET_DEG = -5.0;
 
-    static double MAX_TURN_POWER = 0.55;
-    public static double kP_TURN = 0.0095;
+    public static double MAX_TURN_POWER = 0.6;
+    public static double kP_TURN = 0.001;
     public static double kD_TURN = 0.002;
 
     private double lastErr = 0.0;
@@ -91,6 +91,11 @@ public class NikethTele extends OpMode {
         double strafe  = -Math.pow(gamepad1.left_stick_x, 5);
         double rotate;
 
+        if (gamepad1.a) {
+            forward = forward * 0.26;
+            strafe = strafe * 0.2;
+        }
+
 
 //    if (gamepad1.aWasPressed()) {
 //         follower.setPose(new Pose(141.5,0, Math.toRadians(90)));
@@ -128,48 +133,58 @@ public class NikethTele extends OpMode {
 //    }
 
 
-    // ---------------- AUTO ALIGN ----------------
-    if (gamepad1.right_trigger > 0.1) {
-        telemetry.addData("ALIGNING","true");
-        double error = Robot.cam.getATangle();
-        double derivative = error - lastErr;
+        // ---------------- AUTO ALIGN ----------------
+        if (gamepad1.right_trigger > 0.1) {
+            telemetry.addData("ALIGNING","true");
+            double error = Robot.cam.getATangle();
+            double derivative = error - lastErr;
 
-        lastErr = error;
+            lastErr = error;
 
-        if (Robot.cam.getATdist() > 100) {
-            telemetry.addLine("Far");
-            MAX_TURN_POWER = 0.65;
-            kP_TURN = 0.015;
-            kD_TURN = 0.001;
+            if (Robot.cam.getATdist() > 100) {
+                telemetry.addLine("Far");
+                MAX_TURN_POWER = 0.65;
+                kP_TURN = 0.015;
+                kD_TURN = 0.001;
+                double turnCmd = (kP_TURN * error) + (kD_TURN * derivative);
+
+                rotate = Range.clip(turnCmd, -MAX_TURN_POWER, MAX_TURN_POWER);
+                telemetry.addData("Rotate value", rotate);
+
+            } else {
+                telemetry.addLine("Close");
+                MAX_TURN_POWER = 0.55;
+                kP_TURN = 0.01;
+                kD_TURN = 0.0006;
+                double turnCmd = (kP_TURN * error) + (kD_TURN * derivative);
+
+                rotate = Range.clip(turnCmd, -MAX_TURN_POWER, MAX_TURN_POWER);
+                telemetry.addData("Rotate value", rotate);
+            }
+
+            follower.setTeleOpDrive(0, 0, rotate, true);
+
         } else {
-            telemetry.addLine("Close");
-            MAX_TURN_POWER = 0.55;
-            kP_TURN = 0.0095;
-            kD_TURN = 0.002;
+            lastErr = 0;
+            rotate = -(Math.pow(gamepad1.right_stick_x, 3)) * 0.38;
 
+            if (gamepad1.left_trigger > 0.1) {
+                if (gamepad1.a) {
+                    rotate = rotate * 0.2;
+                }
+                telemetry.addData("Mecanum Override", true);
+                follower.setTeleOpDrive(forward, strafe, rotate, true);
+
+            } else {
+                if (gamepad1.a) {
+                    rotate = rotate * 0.2;
+                }
+                follower.setTeleOpDrive(forward, 0, rotate, true);
+            }
+            telemetry.addData("Rotate value", rotate);
         }
-        double turnCmd = (kP_TURN * error) + (kD_TURN * derivative);
-
-        rotate = Range.clip(turnCmd, -MAX_TURN_POWER, MAX_TURN_POWER);
-        follower.setTeleOpDrive(0, 0, rotate, true);
-
-    } else {
-        lastErr = 0;
-        if (gamepad1.left_trigger > 0.1) {
-            telemetry.addData("Mecanum Override", true);
-            follower.setTeleOpDrive(forward, strafe, -(Math.pow(gamepad1.right_stick_x,3)) * 0.8, true);
-        } else {
-            follower.setTeleOpDrive(forward, 0, -(Math.pow(gamepad1.right_stick_x, 3)) * 0.8, true);
-        }
-    }
 
 
-//        //Rumble Settings
-//        if (Math.abs(visionHeadingError) < 1) {
-//            gamepad1.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
-//        } else {
-//            gamepad1.stopRumble();
-//        }
 
 
 

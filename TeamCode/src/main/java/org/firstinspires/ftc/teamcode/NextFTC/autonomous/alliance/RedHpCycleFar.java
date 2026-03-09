@@ -16,11 +16,12 @@ import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 //import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.FarShooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.BaseShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -38,7 +39,7 @@ public class RedHpCycleFar extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, s.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        FarShooternf.INSTANCE, Stoppernf.INSTANCE
+                        BaseShooternf.INSTANCE, Stoppernf.INSTANCE
 //                        Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -139,29 +140,30 @@ public class RedHpCycleFar extends NextFTCOpMode {
                         new FollowPath(scorePreloads),
 
                         Intakenf.INSTANCE.in(),
-                        FarShooternf.INSTANCE.setShooterVel(-1300)
+                        BaseShooternf.INSTANCE.setShooterVel(1300)
                 ),
+                new Delay(1.5),
                 s.i.shoot(2, 0.6),
 
                 //Set 2
                 new FollowPath(grabDownCycle),
                 new FollowPath(scoreDownCycle),
-                s.i.shoot(1.5,0.8),
+                s.i.shoot(1.5,0.6),
 
                 //Set 3
                 new FollowPath(grabDownCycle),
                 new FollowPath(scoreDownCycle),
-                s.i.shoot(1.5,0.8),
+                s.i.shoot(1.5,0.6),
 
                 //Set 4
                 new FollowPath(grabDownCycle),
                 new FollowPath(scoreDownCycle),
-                s.i.shoot(1.5,0.8),
+                s.i.shoot(1.5,0.6),
 
                 //Set 5
                 new FollowPath(grabDownCycle),
                 new FollowPath(scoreDownCycle),
-                s.i.shoot(1.5,0.8),
+                s.i.shoot(1.5,0.6),
 
                 new FollowPath(park)
 
@@ -174,13 +176,13 @@ public class RedHpCycleFar extends NextFTCOpMode {
     public void onInit() {
         buildPaths();
         init_bot().schedule();
-        FarShooternf.INSTANCE.disable();
+        BaseShooternf.INSTANCE.disable();
     }
 
     @Override
     public void onStartButtonPressed() {
         autonomous().schedule();
-        FarShooternf.INSTANCE.enable();
+        BaseShooternf.INSTANCE.enable();
     }
 
     @Override

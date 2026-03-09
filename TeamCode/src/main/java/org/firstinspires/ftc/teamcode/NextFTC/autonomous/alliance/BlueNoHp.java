@@ -8,7 +8,6 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -21,12 +20,10 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.BaseShooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Stoppernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.opencv.core.Mat;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
-import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -37,9 +34,9 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 
 @Config
-@Autonomous(name = "2 Gate Blue 15 Close")
-public class Blue15Close2Gate extends NextFTCOpMode {
-    public Blue15Close2Gate() {
+@Autonomous(name = "Blue No HP 15")
+public class BlueNoHp extends NextFTCOpMode {
+    public BlueNoHp() {
         addComponents(
                 new SubsystemComponent(
                         f.i, s.i,
@@ -61,11 +58,10 @@ public class Blue15Close2Gate extends NextFTCOpMode {
     public PathChain scoreSet3;
     public PathChain grabSet4;
     public PathChain scoreSet4;
-    public PathChain grabHp;
-    public PathChain scoreHp;
 
-    public Pose scorePose = new Pose(90,88).mirror();
-    public double scoreHeading = 180-44;
+
+    public Pose scorePose = new Pose(92,88).mirror();
+    public double scoreHeading = 180-45;
 
     public void buildPaths() {
         follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)).mirror());
@@ -97,7 +93,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(126.5, 82.9).mirror(),
                                 new Pose(110.481, 71.074).mirror(),
-                                new Pose(125.6, 74).mirror()
+                                new Pose(126.5, 74).mirror()
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(180-0))
 
@@ -105,7 +101,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
         scoreSet2 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(125.6, 74).mirror(),
+                                new Pose(126.5, 74).mirror(),
                                 scorePose
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(scoreHeading))
@@ -143,7 +139,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(131, 58).mirror(),
                                 new Pose(105.151, 58.012).mirror(),
-                                new Pose(125.4, 74).mirror()
+                                new Pose(126, 74).mirror()
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(180-0))
 
@@ -151,7 +147,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
         scoreSet3 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(125.4, 74).mirror(),
+                                new Pose(126, 74).mirror(),
                                 scorePose
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(scoreHeading))
@@ -162,7 +158,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(85, 28).mirror(),
                                 new Pose(90, 37).mirror(),
-                                new Pose(131, 33.5).mirror()
+                                new Pose(131, 35.5).mirror()
                         )
                 ).setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -187,7 +183,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
         scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(131, 33.5).mirror(),
+                                new Pose(131, 35.5).mirror(),
                                 scorePose
                         )
                 )
@@ -212,36 +208,6 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                 )
                 .build();
 
-        grabHp = PedroComponent.follower().pathBuilder().addPath(
-                        new BezierCurve(
-                                scorePose,
-                                new Pose(129, 58.000).mirror(),
-                                new Pose(130, 12.000).mirror()
-                        )
-                ).setTangentHeadingInterpolation()
-                .build();
-
-        scoreHp = PedroComponent.follower().pathBuilder().addPath(
-                        new BezierLine(
-                                new Pose(130, 12.000).mirror(),
-                                new Pose(88, 110).mirror()
-                        )
-                ).setHeadingInterpolation(
-                        HeadingInterpolator.piecewise(
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0,
-                                        0.9,
-                                        HeadingInterpolator.tangent.reverse()
-                                ),
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0.9,
-                                        1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(180-32))
-                                )
-                        )
-                )
-                .build();
-
 
 
     }
@@ -256,16 +222,18 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
     private Command autonomous() {
         return new SequentialGroup(
-
-                new ParallelDeadlineGroup(
+                new ParallelGroup(
                         new FollowPath(scorePreloads),
-                        BaseShooternf.INSTANCE.setShooterVel(1100),
 
-                        Intakenf.INSTANCE.in()
+                        s.i.shooterState(1110),
+                        Intakenf.INSTANCE.in(),
+
+                        new SequentialGroup(
+                                new WaitUntil(() -> scorePreloads.lastPath().getDistanceRemaining() < 2),
+                                new Delay(0.6),
+                                s.i.shoot(1)
+                        )
                 ),
-                new Delay(0.5),
-                s.i.shoot(0.7),
-
                 new FollowPath(grabSet2),
                 new FollowPath(gateSet2),
                 new ParallelGroup(
@@ -281,7 +249,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
                 new FollowPath(grabSet3),
                 new FollowPath(gateSet3),
-                new Delay(0.3),
+                new Delay(0.4),
                 new ParallelGroup(
                         new FollowPath(scoreSet3),
 
@@ -303,17 +271,20 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                 s.i.shoot(0.6)
                         )
                 ),
-//                    new Delay(1),
 
+                //Set 4 again
+                new FollowPath(grabSet4),
                 new ParallelGroup(
-                        new FollowPath(grabHp),
-                        s.i.shooterState(960,0.5)
+                        new FollowPath(scoreSet4),
 
-                ),
-                new FollowPath(scoreHp),
-                new Delay(0.3),
-                Stoppernf.INSTANCE.open()
+                        new SequentialGroup(
+                                new WaitUntil(() -> scoreSet4.lastPath().getDistanceRemaining() < 0.2),
+                                new Delay(0.2),
+                                s.i.shoot(0.6)
+                        )
+                )
         );
+
     }
 
 

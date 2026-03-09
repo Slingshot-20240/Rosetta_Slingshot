@@ -106,7 +106,7 @@ public class FSM {
                     } else {
                         // get position will get last passed position so uh hopefully that should work
                         robot.shooter.setHoodAngle(targetHoodPos);
-                        robot.shooter.setShooterVelocity(targetVelocity + 50); // TODO maybe add offset
+                        robot.shooter.setShooterVelocity(targetVelocity); // TODO maybe add offset (was 50)
                     }
 
                     // set LED states
@@ -114,9 +114,17 @@ public class FSM {
                         robot.ledBoard0.setState(false);
                         robot.ledBoard1.setState(true);
                     } else {
-                        robot.ledBoard0.setState(false);
-                        robot.ledBoard1.setState(false);
+
+                        if (Math.abs(Robot.cam.getATangle()) < 5 && Robot.cam.getATangle() != 0) {
+                            robot.ledBoard0.setState(true);
+                            robot.ledBoard1.setState(true);
+                        } else {
+                            robot.ledBoard0.setState(false);
+                            robot.ledBoard1.setState(false);
+                        }
                     }
+
+
                 }
 
                 // --------------- Hardcoded Only ---------------

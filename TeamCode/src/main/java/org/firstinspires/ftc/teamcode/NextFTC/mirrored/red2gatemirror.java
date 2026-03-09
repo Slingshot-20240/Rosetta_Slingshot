@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance;
+package org.firstinspires.ftc.teamcode.NextFTC.mirrored;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
@@ -37,9 +37,9 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 
 @Config
-@Autonomous(name = "2 Gate Blue 15 Close")
-public class Blue15Close2Gate extends NextFTCOpMode {
-    public Blue15Close2Gate() {
+@Autonomous(name = "2 gate red mirrored")
+public class red2gatemirror extends NextFTCOpMode {
+    public red2gatemirror() {
         addComponents(
                 new SubsystemComponent(
                         f.i, s.i,
@@ -64,18 +64,18 @@ public class Blue15Close2Gate extends NextFTCOpMode {
     public PathChain grabHp;
     public PathChain scoreHp;
 
-    public Pose scorePose = new Pose(90,88).mirror();
-    public double scoreHeading = 180-44;
+    public Pose scorePose = new Pose(90,88);
+    public double scoreHeading = 44;
 
     public void buildPaths() {
-        follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)).mirror());
+        follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
 
         scorePreloads = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(126.2, 119).mirror(), scorePose)
+                        new BezierLine(new Pose(126.2, 119), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180-36), Math.toRadians(180-43))
+                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43))
 //                .setTangentHeadingInterpolation().setReversed()
                 .build();
 
@@ -86,38 +86,38 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(92.292, 77).mirror(),
-                                new Pose(126.5, 82.9).mirror()
+                                new Pose(92.292, 77),
+                                new Pose(126.5, 82.9)
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180-0))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         gateSet2 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
-                                new Pose(126.5, 82.9).mirror(),
-                                new Pose(110.481, 71.074).mirror(),
-                                new Pose(125.6, 74).mirror()
+                                new Pose(126.5, 82.9),
+                                new Pose(110.481, 71.074),
+                                new Pose(125.6, 74)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(180-0))
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
                 .build();
 
         scoreSet2 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(125.6, 74).mirror(),
+                                new Pose(125.6, 74),
                                 scorePose
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(scoreHeading))
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(scoreHeading))
 
                 .build();
 
         grabSet3 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(88.941, 53.686).mirror(),
-                                new Pose(96.582, 59.502).mirror(),
-                                new Pose(131, 58).mirror()
+                                new Pose(88.941, 53.686),
+                                new Pose(96.582, 59.502),
+                                new Pose(131, 58)
                         )
                 ).setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -126,13 +126,13 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                         0.55,
                                         HeadingInterpolator.linear(
                                                 Math.toRadians(scoreHeading),
-                                                Math.toRadians(180-0)
+                                                Math.toRadians(0)
                                         )
                                 ),
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.55,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(180-0))
+                                        HeadingInterpolator.constant(Math.toRadians(0))
                                 )
                         )
                 )
@@ -141,28 +141,28 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
         gateSet3 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
-                                new Pose(131, 58).mirror(),
-                                new Pose(105.151, 58.012).mirror(),
-                                new Pose(125.4, 74).mirror()
+                                new Pose(131, 58),
+                                new Pose(105.151, 58.012),
+                                new Pose(125.4, 74)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(180-0))
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
                 .build();
 
         scoreSet3 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(125.4, 74).mirror(),
+                                new Pose(125.4, 74),
                                 scorePose
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(scoreHeading))
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(scoreHeading))
                 .build();
 
         grabSet4 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(85, 28).mirror(),
-                                new Pose(90, 37).mirror(),
-                                new Pose(131, 33.5).mirror()
+                                new Pose(85, 28),
+                                new Pose(90, 37),
+                                new Pose(131, 33.5)
                         )
                 ).setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -171,14 +171,14 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                         0.1,
                                         HeadingInterpolator.linear(
                                                 Math.toRadians(scoreHeading),
-                                                Math.toRadians(180-0)
+                                                Math.toRadians(0)
                                         )
 //                                        HeadingInterpolator.tangent
                                 ),
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.1,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(180-0))
+                                        HeadingInterpolator.constant(Math.toRadians(0))
                                 )
                         )
                 )
@@ -187,7 +187,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
 
         scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(131, 33.5).mirror(),
+                                new Pose(131, 33.5),
                                 scorePose
                         )
                 )
@@ -196,7 +196,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
                                         0.06,
-                                        HeadingInterpolator.constant(Math.toRadians(180-0))
+                                        HeadingInterpolator.constant(Math.toRadians(0))
                                 ),
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.06,
@@ -215,16 +215,16 @@ public class Blue15Close2Gate extends NextFTCOpMode {
         grabHp = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(129, 58.000).mirror(),
-                                new Pose(130, 12.000).mirror()
+                                new Pose(129, 58.000),
+                                new Pose(130, 12.000)
                         )
                 ).setTangentHeadingInterpolation()
                 .build();
 
         scoreHp = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(130, 12.000).mirror(),
-                                new Pose(88, 110).mirror()
+                                new Pose(130, 12.000),
+                                new Pose(88, 110)
                         )
                 ).setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -236,7 +236,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.9,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(180-32))
+                                        HeadingInterpolator.constant(Math.toRadians(32))
                                 )
                         )
                 )

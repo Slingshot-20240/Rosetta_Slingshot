@@ -97,7 +97,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new BezierCurve(
                                     new Pose(126.5, 82.9),
                                     new Pose(110.481, 71.074),
-                                    new Pose(126.5, 74)
+                                    new Pose(127.5, 74)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
@@ -105,7 +105,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreSet2 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(126.5, 74),
+                                    new Pose(127.5, 74),
                                     scorePose
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(scoreHeading))
@@ -117,7 +117,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                                     scorePose,
                                     new Pose(88.941, 53.686),
                                     new Pose(96.582, 59.502),
-                                    new Pose(131, 58)
+                                    new Pose(131.2, 58)
                             )
                     ).setHeadingInterpolation(
                             HeadingInterpolator.piecewise(
@@ -141,9 +141,9 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             gateSet3 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(131, 58),
+                                    new Pose(131.2, 58),
                                     new Pose(105.151, 58.012),
-                                    new Pose(126, 74)
+                                    new Pose(126.7, 74)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
@@ -151,7 +151,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreSet3 = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(126, 74),
+                                    new Pose(126.7, 74),
                                     scorePose
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(scoreHeading))
@@ -216,7 +216,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                             new BezierCurve(
                                     scorePose,
                                     new Pose(129, 58.000),
-                                    new Pose(130, 12.000)
+                                    new Pose(131.2, 12.000)
                             )
                     ).setTangentHeadingInterpolation()
 
@@ -224,7 +224,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
             scoreHp = PedroComponent.follower().pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(130, 12.000),
+                                    new Pose(131.2, 12.000),
                                     new Pose(88, 110)
                             )
                     ).setHeadingInterpolation(
@@ -260,7 +260,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
                     new ParallelGroup(
                             new FollowPath(scorePreloads),
 
-                            s.i.shooterState(1120),
+                            s.i.shooterState(1105),
                             Intakenf.INSTANCE.in(),
 
                             new SequentialGroup(
