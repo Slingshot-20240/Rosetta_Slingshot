@@ -59,15 +59,20 @@ public class FSM {
 
                 // Intake toggle
                 if (gamepad.intake.value()) {
-                    intake.intakeTransferOn();
+                    intake.intakeTransferOnClose();
                 } else if (!gamepad.transfer.locked()) {
                     intake.intakeTransferOff();
                 }
 
                 // Stopper hold
                 if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
-                    intake.intakeTransferOn();
-                    stopper.release();
+                    if (Robot.cam.getATdist() > 100) {
+                        intake.intakeTransferOnFar();
+                        stopper.release();
+                    } else {
+                        intake.intakeTransferOnClose();
+                        stopper.release();
+                    }
                 } else {
                     stopper.stop();
                 }
@@ -90,7 +95,7 @@ public class FSM {
                     // calculate target
                     if (Robot.cam.getATdist() > 100) {
                         targetHoodPos = robot.shooter.calculateHoodPos(distance) - 0.2;
-                        targetVelocity = targetVelocity + 100;
+                        targetVelocity = targetVelocity + 50;
                     } else {
                         targetHoodPos = robot.shooter.calculateHoodPos(distance);
                     }
@@ -168,7 +173,7 @@ public class FSM {
 
             case PID_SHOOT:
 
-                intake.intakeTransferOn();
+                intake.intakeTransferOnClose();
                 stopper.release();
 
                 if (!gamepad.transfer.locked()) {
@@ -193,7 +198,7 @@ public class FSM {
 
                 shooter.shootFromBack();
                 shooter.hoodToBack();
-                intake.intakeTransferOn();
+                intake.intakeTransferOnClose();
 
                 stopper.stop();
 
@@ -206,7 +211,7 @@ public class FSM {
 
             case SHOOT_FRONT:
 
-                intake.intakeTransferOn();
+                intake.intakeTransferOnFar();
                 shooter.shootFromFront();
                 shooter.hoodToFront();
 

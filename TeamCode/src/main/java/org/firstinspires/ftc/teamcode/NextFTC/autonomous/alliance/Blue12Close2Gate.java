@@ -28,6 +28,7 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelDeadlineGroup;
 import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -37,9 +38,9 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 
 @Config
-@Autonomous(name = "2 Gate Blue 15 Close")
-public class Blue15Close2Gate extends NextFTCOpMode {
-    public Blue15Close2Gate() {
+@Autonomous(name = "2 Gate Blue 12 Close")
+public class Blue12Close2Gate extends NextFTCOpMode {
+    public Blue12Close2Gate() {
         addComponents(
                 new SubsystemComponent(
                         f.i, s.i,
@@ -188,7 +189,8 @@ public class Blue15Close2Gate extends NextFTCOpMode {
         scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(131, 33.5).mirror(),
-                                scorePose
+                                new Pose(88, 110).mirror()
+
                         )
                 )
                 .setHeadingInterpolation(
@@ -206,7 +208,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.6,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(scoreHeading))
+                                        HeadingInterpolator.constant(Math.toRadians(153))
                                 )
                         )
                 )
@@ -274,7 +276,7 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                         new SequentialGroup(
                                 new WaitUntil(() -> scoreSet2.lastPath().getDistanceRemaining() < 0.2),
                                 new Delay(0.4),
-                                s.i.shoot(0.6)
+                                s.i.shoot(0.7)
                         )
                 ),
 
@@ -288,31 +290,37 @@ public class Blue15Close2Gate extends NextFTCOpMode {
                         new SequentialGroup(
                                 new WaitUntil(() -> scoreSet3.lastPath().getDistanceRemaining() < 0.2),
                                 new Delay(0.2),
-                                s.i.shoot(0.6)
+                                s.i.shoot(0.7)
                         )
                 ),
 //                    s.i.shoot(1),
+                new ParallelGroup(
+                        new FollowPath(grabSet4),
+                        s.i.shooterState(960,0.5)
 
-                new FollowPath(grabSet4),
+                        ),
                 new ParallelGroup(
                         new FollowPath(scoreSet4),
 
                         new SequentialGroup(
                                 new WaitUntil(() -> scoreSet4.lastPath().getDistanceRemaining() < 0.2),
                                 new Delay(0.2),
-                                s.i.shoot(0.6)
+                                s.i.shoot(1)
                         )
-                ),
+                )
 //                    new Delay(1),
-
+/*
                 new ParallelGroup(
                         new FollowPath(grabHp),
                         s.i.shooterState(960,0.5)
 
                 ),
                 new FollowPath(scoreHp),
+
+
                 new Delay(0.3),
                 Stoppernf.INSTANCE.open()
+                */
         );
     }
 

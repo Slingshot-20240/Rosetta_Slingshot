@@ -257,18 +257,16 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
         private Command autonomous() {
             return new SequentialGroup(
-                    new ParallelGroup(
+
+                    new ParallelDeadlineGroup(
                             new FollowPath(scorePreloads),
+                            BaseShooternf.INSTANCE.setShooterVel(1030),
 
-                            s.i.shooterState(1105),
-                            Intakenf.INSTANCE.in(),
-
-                            new SequentialGroup(
-                                    new WaitUntil(() -> scorePreloads.lastPath().getDistanceRemaining() < 2),
-                                    new Delay(0.6),
-                                    s.i.shoot(1)
-                            )
+                            Intakenf.INSTANCE.in()
                     ),
+                    new Delay(0.5),
+                    s.i.shoot(0.7),
+
                     new FollowPath(grabSet2),
                     new FollowPath(gateSet2),
                     new ParallelGroup(
@@ -284,7 +282,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
                     new FollowPath(grabSet3),
                     new FollowPath(gateSet3),
-                    new Delay(0.4),
+                    new Delay(0.3),
                     new ParallelGroup(
                             new FollowPath(scoreSet3),
 
@@ -330,12 +328,12 @@ import dev.nextftc.ftc.components.BulkReadComponent;
         @Override
         public void onStartButtonPressed() {
             autonomous().schedule();
-        BaseShooternf.INSTANCE.enable();
+            BaseShooternf.INSTANCE.enable();
         }
 
         @Override
         public void onStop() {
             PoseStorage.startingPose = follower().getPose();
         }
-}
+    }
 

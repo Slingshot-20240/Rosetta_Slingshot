@@ -61,7 +61,7 @@ public class ShooterPID extends OpMode {
         // Updates all other controls
         controls.update();
 
-        robot.intake.intakeTransferOn();
+        robot.intake.intakeTransferOnClose();
 
 //        if (controls.transfer.value()) {
 //            robot.stopper.close();

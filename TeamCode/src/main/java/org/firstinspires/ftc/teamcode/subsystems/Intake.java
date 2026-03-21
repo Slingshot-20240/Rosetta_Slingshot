@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
@@ -30,9 +29,14 @@ public class Intake {
 
 //-------------------------------------------------------------------------------
 
-    public void intakeTransferOn() {
+    public void intakeTransferOnClose() {
         dropdownIntake.setPower(-1);
         intake1.setPower(-1);
+    }
+
+    public void intakeTransferOnFar() {
+        dropdownIntake.setPower(-1);
+        intake1.setPower(-0.75);
     }
 
     public void intakeTransferOff() {

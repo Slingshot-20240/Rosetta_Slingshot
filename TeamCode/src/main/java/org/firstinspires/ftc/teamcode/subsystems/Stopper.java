@@ -18,7 +18,6 @@ public class Stopper {
     public void release() {
         stopper.setPosition(0.48);
     }
-
     public void stop() {
         stopper.setPosition(0.7);
     }

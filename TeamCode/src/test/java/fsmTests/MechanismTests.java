@@ -150,7 +150,7 @@ public class MechanismTests {
     // -- INTAKE --
     @Test
     public void intakeOn() {
-        intakeMech.intakeTransferOn();
+        intakeMech.intakeTransferOnClose();
 
         verify(intake1).setPower(-1);
     }

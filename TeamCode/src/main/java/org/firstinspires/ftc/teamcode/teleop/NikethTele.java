@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -55,8 +56,6 @@ public class NikethTele extends OpMode {
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
-
-
     }
 
     @Override
@@ -143,8 +142,8 @@ public class NikethTele extends OpMode {
 
             if (Robot.cam.getATdist() > 100) {
                 telemetry.addLine("Far");
-                MAX_TURN_POWER = 0.65;
-                kP_TURN = 0.015;
+                MAX_TURN_POWER = 0.6;
+                kP_TURN = 0.009;
                 kD_TURN = 0.001;
                 double turnCmd = (kP_TURN * error) + (kD_TURN * derivative);
 
@@ -153,9 +152,9 @@ public class NikethTele extends OpMode {
 
             } else {
                 telemetry.addLine("Close");
-                MAX_TURN_POWER = 0.55;
-                kP_TURN = 0.01;
-                kD_TURN = 0.0006;
+                MAX_TURN_POWER = 0.6;
+                kP_TURN = 0.009;
+                kD_TURN = 0.001;
                 double turnCmd = (kP_TURN * error) + (kD_TURN * derivative);
 
                 rotate = Range.clip(turnCmd, -MAX_TURN_POWER, MAX_TURN_POWER);
@@ -192,6 +191,7 @@ public class NikethTele extends OpMode {
         telemetry.addData("Pose", pose.toString());
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
         telemetry.addData("AT Distance", Robot.cam.getATdist());
+
     }
 
     @Override
